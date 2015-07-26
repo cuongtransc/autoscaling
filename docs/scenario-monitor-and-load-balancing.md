@@ -63,7 +63,6 @@ Kiến trúc:
 
 
 # Contact
-http://www.meetup.com/Docker-Hanoi/
-Trần Hữu Cường: tranhuucuong91@gmail.com
-Nguyễn Văn Thường: thuongnvbk@gmail.com
-
+- http://www.meetup.com/Docker-Hanoi/
+- Trần Hữu Cường: tranhuucuong91@gmail.com
+- Nguyễn Văn Thường: thuongnvbk@gmail.com
