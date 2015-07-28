@@ -138,6 +138,7 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
     + Có thể aggregate theo mốc thời gian, khoảng thời gian
 - API để lấy dữ liệu tổng hợp
     + Các API viết bằng javascript để truy vấn đến InfluxDB qua giao thức HTTP
+    
 ### Xây dựng hệ thống auto-scaling giả
 
 **1. Ý tưởng**
