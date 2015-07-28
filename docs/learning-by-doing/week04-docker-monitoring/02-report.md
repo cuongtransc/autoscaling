@@ -1,4 +1,4 @@
-# Báo cáo tuần 4 - 5
+# Báo cáo tuần 4
 ## Auto - scaling team
 ### Setup hệ thống monitoring.
 **1. Setup InfluxDB – bộ Database chuyên hóa.**
