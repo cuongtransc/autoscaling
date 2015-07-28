@@ -1,6 +1,6 @@
 # Báo cáo tuần 4 - 5
-#### Auto - scaling team
-##### Setup hệ thống monitoring.
+## Auto - scaling team
+### Setup hệ thống monitoring.
 **1. Setup InfluxDB – bộ Database chuyên hóa.**
 - script:
 ```sh
@@ -75,7 +75,7 @@ grafana/grafana:2.0.2
     + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)      
     + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)      
     
-##### Các câu hỏi về hệ thống monitoring
+### Các câu hỏi về hệ thống monitoring
 **1. cAdvisor**
 - Cấu trúc dữ liệu
     + Theo dõi theo process, dưới dạng cấu trúc cây (có root, các nút...)
