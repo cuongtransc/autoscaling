@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Báo cáo tuần 4 - 5
 #### Auto - scaling team
 ##### Setup hệ thống monitoring.
@@ -11,10 +10,10 @@ $ docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 -e     PRE
 - port 8086: giao tiếp với các application khác
 - Setup thành công:
     + vào địa chỉ localhost:8083
-    + ![Image 1]()
+    + ![Image 1](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/1.png)
         - username - password : root
     +  giao diện người dùng: 
-    + ![Image 2]()
+    + ![Image 2](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/2.png)
     
         Nếu chưa có bộ database cadvisor  thì tạo mới 1 bộ.
 
@@ -39,8 +38,8 @@ google/cadvisor:0.14.0 \
 + các thông số khác thiết lập như trên
 - setup thành công:
     + vào link localhost:8080
-    + ![Image 3]()
-    + ![Image 4]()
+    + ![Image 3](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/3.png)
+    + ![Image 4](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/4.png)
     
 **3. Setup Grafana - bộ visualizing**
 - Script: 
@@ -61,20 +60,20 @@ grafana/grafana:2.0.2
 - setup thành công:
     + vào link localhost:8086
     + user – password: admin
-    + ![image 5]()
+    + ![image 5](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/5.png)
     + ở giao diện chính, click vào logo Grafana góc trái trên cùng màn hình, popup hiện ra chọn Data Sources, Add New
-    + ![image 6]()
+    + ![image 6](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/6.png)
     + setup các thông số như sau:
-    + ![image 7]()    
+    + ![image 7](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/7.png)    
 - Cấu hình Grafana để theo dõi các statistics:
     + Ở menu bên phải chọn Dashboard,  Home Menu, New, Add Panel, Graph
-    + ![image 8]()      
+    + ![image 8](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/8.png)      
     + một Graph hiện ra, chọn no title, edit
-    + ![image 9]()      
+    + ![image 9](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/9.png)      
     + 1 bảng hiện ra, thiết lập các query  để lấy dữ liệu thích hợp từ InfluxDB
     + Ví dụ:
-    + ![image 10]()      
-    + ![image 11]()      
+    + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)      
+    + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)      
     
 ##### Các câu hỏi về hệ thống monitoring
 **1. cAdvisor**
@@ -127,11 +126,11 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
 **3. Grafana:**
 - Những biểu đồ cung cấp:
     + graph
-        + ![Image]()
+        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/12.png)
     + singlestat
-        + ![Image]()
+        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/13.png)
     + annotation
-        + ![Image]()
+        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/14.png)
 - Việc aggregate dữ liệu
     + Hỗ trợ tạo query đến InfluxDB để lấy dữ liệu
     + Hỗ trợ query template
@@ -193,6 +192,7 @@ while True:
 - Tự động cập nhật lại threshold khi thực hiện scaling.
 - Theo dõi docker container theo chu kì 5 phút và đưa ra quyết định scale
 
+![image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/15.png)
 
 	
 
@@ -208,6 +208,3 @@ while True:
 
 
 
-=======
-TODO
->>>>>>> 763b05e510364ca39f458f38a4c1d480e3159350
