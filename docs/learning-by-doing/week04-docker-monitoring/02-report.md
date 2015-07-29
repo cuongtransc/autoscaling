@@ -140,3 +140,9 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
     + Có thể aggregate theo mốc thời gian, khoảng thời gian
 - API để lấy dữ liệu tổng hợp
     + Các API viết bằng javascript để truy vấn đến InfluxDB qua giao thức HTTP
+
+##### Tham khảo
+- https://www.brianchristner.io/how-to-setup-docker-monitoring/
+- https://influxdb.com/docs/v0.8/introduction/overview.html
+- http://docs.grafana.org/
+- https://github.com/google/cadvisor
