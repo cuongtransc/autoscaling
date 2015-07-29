@@ -1,6 +1,6 @@
-# Báo cáo tuần 4 - 5
+# Báo cáo tuần 4
 #### Auto - scaling team
-##### Setup hệ thống monitoring.
+##### A. Setup hệ thống monitoring.
 **1. Setup InfluxDB – bộ Database chuyên hóa.**
 - script:
 ```sh
@@ -10,11 +10,11 @@ $ docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 -e     PRE
 - port 8086: giao tiếp với các application khác
 - Setup thành công:
     + vào địa chỉ localhost:8083
-    + ![Image 1](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/1.png)
+    + ![Image 1](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/01.png)
         - username - password : root
-    +  giao diện người dùng: 
-    + ![Image 2](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/2.png)
-    
+    +  giao diện người dùng:
+    + ![Image 2](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/02.png)
+
         Nếu chưa có bộ database cadvisor  thì tạo mới 1 bộ.
 
 **2. Setup cAdvisor - bộ sensor**
@@ -38,11 +38,11 @@ google/cadvisor:0.14.0 \
 + các thông số khác thiết lập như trên
 - setup thành công:
     + vào link localhost:8080
-    + ![Image 3](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/3.png)
-    + ![Image 4](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/4.png)
-    
+    + ![Image 3](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/03.png)
+    + ![Image 4](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/04.png)
+
 **3. Setup Grafana - bộ visualizing**
-- Script: 
+- Script:
 ```sh
 docker run -d -p 3000:3000 \
 -e HTTP_USER=admin \
@@ -60,22 +60,22 @@ grafana/grafana:2.0.2
 - setup thành công:
     + vào link localhost:8086
     + user – password: admin
-    + ![image 5](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/5.png)
+    + ![image 5](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/05.png)
     + ở giao diện chính, click vào logo Grafana góc trái trên cùng màn hình, popup hiện ra chọn Data Sources, Add New
-    + ![image 6](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/6.png)
+    + ![image 6](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/06.png)
     + setup các thông số như sau:
-    + ![image 7](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/7.png)    
+    + ![image 7](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/07.png)
 - Cấu hình Grafana để theo dõi các statistics:
     + Ở menu bên phải chọn Dashboard,  Home Menu, New, Add Panel, Graph
-    + ![image 8](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/8.png)      
+    + ![image 8](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/08.png)
     + một Graph hiện ra, chọn no title, edit
-    + ![image 9](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/9.png)      
+    + ![image 9](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/09.png)
     + 1 bảng hiện ra, thiết lập các query  để lấy dữ liệu thích hợp từ InfluxDB
     + Ví dụ:
-    + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)      
-    + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)      
-    
-##### Các câu hỏi về hệ thống monitoring
+    + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)
+    + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)
+
+##### B. Các câu hỏi về hệ thống monitoring
 **1. cAdvisor**
 - Cấu trúc dữ liệu
     + Theo dõi theo process, dưới dạng cấu trúc cây (có root, các nút...)
@@ -88,7 +88,7 @@ grafana/grafana:2.0.2
     + Dữ liệu được thu thập và xử lý theo chu kì 10s
 - Ước lược kích thước dữ liệu/ 1 docker container
     + Ước lượng theo công thức:
-    
+
         >kích thước một đơn vị dữ liệu mẫu * tần suất gửi dữ liệu trong một đơn vị thời gian* thời gian theo dõi tính theo một đơn vị thời gian
 + Một đơn vị dữ liệu mẫu bao gồm các trường:
 
@@ -116,12 +116,12 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
     + Continuous query: xử lý 1 nhóm dữ liệu theo chu kì và lưu vào database
     ```sh
     VD:
-    select count(type) from events group by time(10m), type 
+    select count(type) from events group by time(10m), type
     into events.count_per_type.10m
     ```
 - Thư viện “Client Libraries”
     + Cung cấp các Client API để thực hiện đọc, ghi, truy vấn đến InfluxDB với nhiều ngôn ngữ:
-    javaScript, Ruby, Rails, Python, PHP, Perl, .NET... 
+    javaScript, Ruby, Rails, Python, PHP, Perl, .NET...
 
 **3. Grafana:**
 - Những biểu đồ cung cấp:
@@ -138,73 +138,3 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
     + Có thể aggregate theo mốc thời gian, khoảng thời gian
 - API để lấy dữ liệu tổng hợp
     + Các API viết bằng javascript để truy vấn đến InfluxDB qua giao thức HTTP
-### Xây dựng hệ thống auto-scaling giả
-
-**1. Ý tưởng**
-- Sử dụng cAdvisor để thu thập thông tin và InfluxDB để lưu thông tin.
-- Dùng thư viện Client Libraries hỗ trợ python có sẵn của InfluxDB để lấy thông tin.
-_  Chạy một docker container, theo dõi, cài đặt thuật toán threshold, thực hiện lệnh scale đơn giản bằng việc in ra màn hình dòng thông báo.
-_ Dùng python.
-
-**2. Thực hiện**
-- Code
-```sh
-import time
-from time import gmtime, strftime
-from influxdb.influxdb08 import InfluxDBClient
-###
-THRESHOLD_UP = 0.002
-THRESHOLD_DOWN = 0.001
-HOST = 'localhost'
-PORT = 8086
-USER = 'root'
-PASS = 'root'
-DATABASE = 'cadvisor'
-SELECT = 'derivative(cpu_cumulative_usage)'
-SERIES = "'stats'"
-WHERE = 'container_name =~ /.*admiring_leakey.*/ and time>now()-5m'
-GROUP_BY = "time(5s), container_name"
-CONDITION = "limit 1 " 
-
-###
-client = InfluxDBClient(HOST,PORT,USER,PASS,DATABASE)
-query = "select"+SELECT+"from"+SERIES+"where"+WHERE+"group by "+GROUP_BY+CONDITION
-
-while True:
-    result = client.query(query)
-    result = result[0]
-    result = result[u'points'][0][1]
-    result = result/10**9/4
-    currentTime=strftime("%Y-%m-%d %H:%M:%S", gmtime())
-
-    if(result>THRESHOLD_UP):
-        print currentTime+" CPU_USAGE= "+str(result)+" scalling up, add 1 instance"
-        THRESHOLD_UP=THRESHOLD_UP
-    elif(result<THRESHOLD_DOWN):
-        print currentTime+" CPU_USAGE= "+str(result)+" scalling down, turn off 1 instance"
-        THRESHOLD_DOWN=THRESHOLD_DOWN
-
-
-    time.sleep(5)
-```
-
-- Có thể thay đổi ngưỡng threshold_up, threshold_down cho phù hợp
-- Tự động cập nhật lại threshold khi thực hiện scaling.
-- Theo dõi docker container theo chu kì 5 phút và đưa ra quyết định scale
-
-![image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/15.png)
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
