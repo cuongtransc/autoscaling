@@ -1,6 +1,11 @@
 # Báo cáo tuần 4
+<<<<<<< HEAD
 #### Auto - scaling team
 ##### A. Setup hệ thống monitoring.
+=======
+## Auto - scaling team
+### Setup hệ thống monitoring.
+>>>>>>> 7fcd3eb2eec1ee7489884baf990d88cac08ea06d
 **1. Setup InfluxDB – bộ Database chuyên hóa.**
 - script:
 ```sh
@@ -72,10 +77,17 @@ grafana/grafana:2.0.2
     + ![image 9](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/09.png)
     + 1 bảng hiện ra, thiết lập các query  để lấy dữ liệu thích hợp từ InfluxDB
     + Ví dụ:
+<<<<<<< HEAD
     + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)
     + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)
 
 ##### B. Các câu hỏi về hệ thống monitoring
+=======
+    + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)      
+    + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)      
+    
+### Các câu hỏi về hệ thống monitoring
+>>>>>>> 7fcd3eb2eec1ee7489884baf990d88cac08ea06d
 **1. cAdvisor**
 - Cấu trúc dữ liệu
     + Theo dõi theo process, dưới dạng cấu trúc cây (có root, các nút...)
@@ -138,3 +150,77 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
     + Có thể aggregate theo mốc thời gian, khoảng thời gian
 - API để lấy dữ liệu tổng hợp
     + Các API viết bằng javascript để truy vấn đến InfluxDB qua giao thức HTTP
+<<<<<<< HEAD
+=======
+    
+### Xây dựng hệ thống auto-scaling giả
+
+**1. Ý tưởng**
+- Sử dụng cAdvisor để thu thập thông tin và InfluxDB để lưu thông tin.
+- Dùng thư viện Client Libraries hỗ trợ python có sẵn của InfluxDB để lấy thông tin.
+_  Chạy một docker container, theo dõi, cài đặt thuật toán threshold, thực hiện lệnh scale đơn giản bằng việc in ra màn hình dòng thông báo.
+_ Dùng python.
+
+**2. Thực hiện**
+- Code
+```sh
+import time
+from time import gmtime, strftime
+from influxdb.influxdb08 import InfluxDBClient
+###
+THRESHOLD_UP = 0.002
+THRESHOLD_DOWN = 0.001
+HOST = 'localhost'
+PORT = 8086
+USER = 'root'
+PASS = 'root'
+DATABASE = 'cadvisor'
+SELECT = 'derivative(cpu_cumulative_usage)'
+SERIES = "'stats'"
+WHERE = 'container_name =~ /.*admiring_leakey.*/ and time>now()-5m'
+GROUP_BY = "time(5s), container_name"
+CONDITION = "limit 1 " 
+
+###
+client = InfluxDBClient(HOST,PORT,USER,PASS,DATABASE)
+query = "select"+SELECT+"from"+SERIES+"where"+WHERE+"group by "+GROUP_BY+CONDITION
+
+while True:
+    result = client.query(query)
+    result = result[0]
+    result = result[u'points'][0][1]
+    result = result/10**9/4
+    currentTime=strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+    if(result>THRESHOLD_UP):
+        print currentTime+" CPU_USAGE= "+str(result)+" scalling up, add 1 instance"
+        THRESHOLD_UP=THRESHOLD_UP
+    elif(result<THRESHOLD_DOWN):
+        print currentTime+" CPU_USAGE= "+str(result)+" scalling down, turn off 1 instance"
+        THRESHOLD_DOWN=THRESHOLD_DOWN
+
+
+    time.sleep(5)
+```
+
+- Có thể thay đổi ngưỡng threshold_up, threshold_down cho phù hợp
+- Tự động cập nhật lại threshold khi thực hiện scaling.
+- Theo dõi docker container theo chu kì 5 phút và đưa ra quyết định scale
+
+![image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/15.png)
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 7fcd3eb2eec1ee7489884baf990d88cac08ea06d
