@@ -76,7 +76,7 @@ grafana/grafana:2.0.2
     + ![image 10](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/10.png)
     + ![image 11](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/11.png)
 
-##### B. Các câu hỏi về hệ thống monitoring
+#### Overview
 
 **1. cAdvisor**
 
@@ -84,10 +84,10 @@ cAdvisor (Container Advisor) provides container users an understanding of the re
 
 Specifically, for each container it keeps resource isolation parameters, historical resource usage, histograms of complete historical resource usage and network statistics. This data is exported by container and machine-wide.
 - Performance Metrics:
-    + CPU: total usage, usage per core, usage breakdown (MHz)
-    + Memory: total usage(MB)
+    + CPU: total usage, usage per core, usage breakdown (Hz)
+    + Memory: total usage(Byte)
     + Network: Throughput-Tx bytes,Rx bytes (Bytes per second), Errors(Errors per second) - Tx bytes, Rx bytes
-    + Filesystem (Storage): total usage (GB)
+    + Filesystem (Storage): total usage (Byte)
 - Frequence of data collection: 
     + Real-time collector (per second)
 - Size of data per one docker container measuring:
@@ -100,8 +100,6 @@ Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative
 --|--|--|--|--|--|--|--|--|--|--|--|--|--|
 
 **2. InfluxDB**
-
-Get more [here](https://influxdb.com/)
 
 InfluxDB is a time series, metrics, and analytics database. cAdvisor only displays realtime information and doesn't store the metrics. We need to store the monitoring information which cAdvisor provides in order to display a time range other than realtime.
 
@@ -125,40 +123,43 @@ Time|Sequence_number|field 1|field 2|field 3|....
 + Store billions of data points.
 
 Aggregate record:
-+ Group by 
 + Merge multiple series together 
 + Group by time range
-+ Graph visualized
++ Graph visualized 
 + Powerful aggregate function: sum, mean, max, count, median...
-
-SQL-like query language:
-+ Tương tự SQL
-+ Có hỗ trợ thêm truy vấn theo khoảng thời gian, mốc thời gian
-+ Hỗ trợ đọc và ghi dữ liệu dùng các giao thức HTTP POST, GET
-+ Aggregate function
-+ Continuous query: xử lý 1 nhóm dữ liệu theo chu kì và lưu vào database
++ SQL-like query language
 
     ```sh
     VD:
     select count(type) from events group by time(10m), type
     into events.count_per_type.10m
     ```
-- Thư viện “Client Libraries”
-    + Cung cấp các Client API để thực hiện đọc, ghi, truy vấn đến InfluxDB với nhiều ngôn ngữ:
-    javaScript, Ruby, Rails, Python, PHP, Perl, .NET...
+Client Libraries
+ + Supporting to interact with InfluxDB throughout HTTP protocol (read, write,insert ...)
+ + Support many language: javaScript, Ruby, Rails, Python, PHP, Perl, .NET...
+
+Get more [here](https://influxdb.com/)
 
 **3. Grafana:**
-- Những biểu đồ cung cấp:
-    + graph
-        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/12.png)
-    + singlestat
-        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/13.png)
-    + annotation
-        + ![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/14.png)
-- Việc aggregate dữ liệu
-    + Hỗ trợ tạo query đến InfluxDB để lấy dữ liệu
-    + Hỗ trợ query template
-    + Hỗ trợ các aggregate function của InfluxDB
-    + Có thể aggregate theo mốc thời gian, khoảng thời gian
-- API để lấy dữ liệu tổng hợp
-    + Các API viết bằng javascript để truy vấn đến InfluxDB qua giao thức HTTP
+
+Grafana is a leading open source application for visualizing large-scale measurement data. The Grafana Dashboard allows us to pull all the pieces together visually. This powerful Dashboard allows us to run queries against the InfluxDB and chart them accordingly in a very nice layout.
+
+Features:
++ graph
+
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/12.png)
++ singlestat
+    
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/13.png)
++ annotation
+
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/14.png)
+
+Data aggregate
++ Interacting with InfluxDB
++ Query template/ editor for InfluxDB
+
+HTTP API
++ The Grafana backend exposes an HTTP API, the same API is used by the frontend to do everything from saving dashboards, creating users and updating data sources.
+
+Get more [here](http://docs.grafana.org/)
