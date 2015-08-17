@@ -97,8 +97,7 @@ Specifically, for each container it keeps resource isolation parameters, histori
 + Structure of a sample data unit:  
 
 Time|Sequence_number|fs_limit|Machine|memory_usage|container_name|cpu_cumulative_usage|memory_working_set|rx_bytes|tx_errors|tx_bytes|fs_device|rx_errors|fs_usage
-
---|--|--|--|--|--|--|--|--|--|--|--|--|--
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
 
 **2. InfluxDB**
 
