@@ -122,7 +122,7 @@ Aggregate record:
 + SQL-like query language
 
     ```sh
-    VD:
+    Exam:
     select count(type) from events group by time(10m), type
     into events.count_per_type.10m
     ```
