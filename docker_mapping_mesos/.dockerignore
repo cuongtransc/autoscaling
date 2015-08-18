@@ -1,0 +1,6 @@
+.dockerignore
+.gitignore
+.git/
+0ref/
+0compose*
+.idea/

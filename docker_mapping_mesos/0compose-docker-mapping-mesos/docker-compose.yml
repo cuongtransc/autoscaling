@@ -1,0 +1,25 @@
+#
+# DockerId mapping MesosId
+#
+
+mapping:
+    image: cocu/docker-mapping-mesos:0.1
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
+        - ../app/:/app/
+    environment:
+        - INFLUXDB_HOST=192.168.122.1
+        - INFLUXDB_PORT=8086
+        - INFLUXDB_NAME=cadvisor
+        - INFLUXDB_USER=root
+        - INFLUXDB_PASS=root
+        - TIME_INTERVAL=10
+    #hostname: foo
+    #domainname: foo.com
+    #cpu_shares: 512
+    #mem_limit: 268435456
+    #privileged: true
+    #restart: always
+    #stdin_open: true
+    #tty: true
