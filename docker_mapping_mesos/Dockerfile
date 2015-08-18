@@ -17,8 +17,9 @@ RUN pip3 install -r /app/requirements.txt
 COPY app/docker_mapping_mesos.py /app/docker_mapping_mesos.py
 RUN chmod +x /app/docker_mapping_mesos.py
 
-COPY ./docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+#COPY ./docker-entrypoint.sh /
+#ENTRYPOINT ["/docker-entrypoint.sh"]
 
 WORKDIR /app
-CMD ["docker_mapping_mesos.py"]
+#CMD ["docker_mapping_mesos.py"]
+CMD ["/app/docker_mapping_mesos.py"]
