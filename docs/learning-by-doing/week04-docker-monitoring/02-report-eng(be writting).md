@@ -8,10 +8,10 @@
 $ docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 -e PRE_CREATE_DB=cadvisor --name influxsrv tutum/influxdb:0.8.8
 ```
 
-	+ `-p 8083:8083` : user interface, log in with username-admin, pass-admin
-	+ `-p 8086:8086` : interaction with orther application
-	+ `PRE_CREATE_DB=cadvisor` : create database have name `cadvisor`
-	+ `--name influxsrv` : container have name `influxsrv`, use to cAdvisor link it.
++ `-p 8083:8083` : user interface, log in with username-admin, pass-admin
++ `-p 8086:8086` : interaction with orther application
++ `PRE_CREATE_DB=cadvisor` : create database have name `cadvisor`
++ `--name influxsrv` : container have name `influxsrv`, use to cAdvisor link it.
 	
 ####2. Install the cAdvisor container and link it to the InfluxDB container.
 - command:
@@ -31,12 +31,12 @@ google/cadvisor:0.14.0 \
 -storage_driver_host=influxsrv:8086 
 ```
 
-	+ `--publish=8080:8080` : user interface
-	+ `--link=influxsrv:influxsrv`: link to container influxsrv
-	+ `-storage_driver=influxdb`: set the storage driver as InfluxDB
-	+ Specify what InfluxDB instance to push data to:
-		* `-storage_driver_host=influxsrv:8086 `: The *ip:port* of the database. Default is 'localhost:8086'
-		* `-storage_driver_db=cadvisor `: database name. Uses db 'cadvisor' by default
++ `--publish=8080:8080` : user interface
++ `--link=influxsrv:influxsrv`: link to container influxsrv
++ `-storage_driver=influxdb`: set the storage driver as InfluxDB
++ Specify what InfluxDB instance to push data to:
+	* `-storage_driver_host=influxsrv:8086 `: The *ip:port* of the database. Default is 'localhost:8086'
+	* `-storage_driver_db=cadvisor `: database name. Uses db 'cadvisor' by default
 
 - After install successfully access url `http://localhost:8080` You should now see the cAdvisor gathering statistics on your Docker host and containers
 
@@ -56,17 +56,17 @@ grafana/grafana:2.0.2
 ```
 
 - After install successfully access url `http://localhost:3000`, config to link it to the InfluxDb:
-	+ Login: Username – admin, password – admin
-	+ Click on the Grafana icon in the upper left hand corner of the GUI. Click on: Data Sources → Add New and fill information follow image:
-	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img01.png)
++ Login: Username – admin, password – admin
++ Click on the Grafana icon in the upper left hand corner of the GUI. Click on: Data Sources → Add New and fill information follow image:
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img01.png)
 
 - Config to monitoring statistics: 
-	+ Click Dashboard → Home Menu →  New →  Add Panel →  Graph
-	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img02.png)
-	+ Click notitle → edit, after write our query for our graph at metric tab.
-	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img03.png)
-	+ Example several graph:
-	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
++ Click Dashboard → Home Menu →  New →  Add Panel →  Graph
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img02.png)
++ Click notitle → edit, after write our query for our graph at metric tab.
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img03.png)
++ Example several graph:
+![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
 
 ### B. Overview
 
