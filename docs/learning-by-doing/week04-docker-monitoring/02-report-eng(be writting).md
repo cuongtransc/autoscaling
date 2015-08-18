@@ -1,8 +1,8 @@
 # Báo cáo tuần 4
 #### Auto - scaling team
 
-##### A. Installation of Docker Monitoring.
-##1. Install the InfluxDb
+### A. Installation of Docker Monitoring.
+####1. Install the InfluxDb
 - command:
 ```
 $ docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 -e PRE_CREATE_DB=cadvisor --name influxsrv tutum/influxdb:0.8.8
@@ -13,7 +13,7 @@ $ docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 -e PRE_CRE
 	+ `PRE_CREATE_DB=cadvisor` : create database have name `cadvisor`
 	+ `--name influxsrv` : container have name `influxsrv`, use to cAdvisor link it.
 	
-##2. Install the cAdvisor container and link it to the InfluxDB container.
+####2. Install the cAdvisor container and link it to the InfluxDB container.
 - command:
 ```
 docker run \
@@ -40,7 +40,7 @@ google/cadvisor:0.14.0 \
 
 - After install successfully access url `http://localhost:8080` You should now see the cAdvisor gathering statistics on your Docker host and containers
 
-##3. Install the Grafana Dashboard and link it to the InfluxDB container:
+####3. Install the Grafana Dashboard and link it to the InfluxDB container:
 - command:
 ```
 docker run -d -p 3000:3000 \
@@ -67,7 +67,8 @@ grafana/grafana:2.0.2
 	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img03.png)
 	+ Example several graph:
 	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
-#### B. Overview
+
+### B. Overview
 
 **1. cAdvisor**
 
