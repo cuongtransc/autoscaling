@@ -157,5 +157,7 @@ grafana/grafana:2.0.2
 	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
 
 
+
 #### References
 - https://www.brianchristner.io/how-to-setup-docker-monitoring/
+- You can use json file to create dashboards: https://github.com/vegasbrianc/docker-monitoring
