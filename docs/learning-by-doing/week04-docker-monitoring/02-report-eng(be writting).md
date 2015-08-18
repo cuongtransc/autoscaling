@@ -56,9 +56,9 @@ grafana/grafana:2.0.2
 ```
 
 - After install successfully access url `http://localhost:3000`, config to link it to the InfluxDb:
-+ Login: Username – admin, password – admin
-+ Click on the Grafana icon in the upper left hand corner of the GUI. Click on: Data Sources → Add New and fill information follow image:
-![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img01.png)
+	+ Login: Username – admin, password – admin
+	+ Click on the Grafana icon in the upper left hand corner of the GUI. Click on: Data Sources → Add New and fill information follow image:
+	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img01.png)
 
 - Config to monitoring statistics: 
 + Click Dashboard → Home Menu →  New →  Add Panel →  Graph
