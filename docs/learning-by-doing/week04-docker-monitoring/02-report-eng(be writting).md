@@ -61,12 +61,12 @@ grafana/grafana:2.0.2
 	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img01.png)
 
 - Config to monitoring statistics: 
-+ Click Dashboard → Home Menu →  New →  Add Panel →  Graph
-![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img02.png)
-+ Click notitle → edit, after write our query for our graph at metric tab.
-![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img03.png)
-+ Example several graph:
-![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
+	+ Click Dashboard → Home Menu →  New →  Add Panel →  Graph
+	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img02.png)
+	+ Click notitle → edit, after write our query for our graph at metric tab.
+	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img03.png)
+	+ Example several graph:
+	![Image](https://github.com/tranhuucuong91/autoscaling/blob/master/docs/learning-by-doing/week04-docker-monitoring/images/img04.png)
 
 ### B. Overview
 
