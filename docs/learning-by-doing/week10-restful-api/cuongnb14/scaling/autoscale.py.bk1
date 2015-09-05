@@ -1,0 +1,106 @@
+#! /usr/bin/env python3
+"""Auto scaling server
+
+author: cuongnb14@gmail.com
+"""
+
+
+from sys import argv
+import json
+from influxdb.influxdb08 import InfluxDBClient
+import time
+import http.client
+import os
+
+json_config=open('config.json').read()
+config = json.loads(json_config)
+
+inf_host = config['influxdb']['host']
+inf_port = config['influxdb']['port']
+inf_username = config['influxdb']['username']
+inf_password = config['influxdb']['password']
+db_name = config['influxdb']['db_name']
+ts_mapping = config['influxdb']['ts_mapping']
+mrt_host = config['marathon']['host']
+mrt_port = config['marathon']['port']
+
+client = InfluxDBClient(inf_host, inf_port, inf_username, inf_password, db_name)
+
+def getCPUUsage(container_name):
+	query = "select DERIVATIVE(cpu_cumulative_usage)  as cpu_usage from stats where container_name = '"+container_name+"' and time > now()-5m group by time(10s) "
+	result = client.query(query)
+	points = result[0]["points"]
+	return points[0][1]/1000000000/4*100
+
+def getContainerName(mesos_task_id):
+	query = "select container_name from "+ts_mapping+" where time>now() - 5m and mesos_task_id = '" +mesos_task_id+"' limit 1" 
+	result = client.query(query)
+	points = result[0]["points"]
+	return points[0][2]
+
+def getContainersName(app_name):
+	connect = http.client.HTTPConnection(mrt_host+":"+mrt_port)
+	connect.request('GET','/v2/apps/'+app_name)
+	response = connect.getresponse()
+	json_response = response.read().decode("utf-8")
+	obj_response = json.loads(json_response)
+	tasks = obj_response['app']['tasks']
+	containers_name = []
+	for task in tasks:
+		containers_name.append(getContainerName(task['id']))
+	return containers_name
+
+def avgCPUUsage(containers_name):
+	sum_cpu_usage = 0
+	for container_name in containers_name:
+		sum_cpu_usage += getCPUUsage(container_name)
+	return sum_cpu_usage / len(containers_name)
+
+def scale(app_name, number):
+	HOST_NAME = 'localhost:8080'
+	HEADER = {'Content-type': 'application/json'}
+	data = '{"instances": '+ str(number) +'}'
+	url = '/v2/apps/' + app_name
+	connect = http.client.HTTPConnection(HOST_NAME)
+	connect.request('PUT',url,data,HEADER)
+	print("scale: scaling "+app_name+" to: "+str(number))
+	print("waiting for config file haproxy.cfg...")
+	time.sleep(5)
+	print('config: config file haproxy.cfg')
+	os.system("sudo ./servicerouter.py --marathon http://"+mrt_host+":"+mrt_port+" --haproxy-config /etc/haproxy/haproxy.cfg")
+
+def main():
+	app_name = argv[1]
+	number_instance = int(argv[2])
+	while True:
+		try:
+			containers_name = getContainersName(app_name)
+			avg_cpu = avgCPUUsage(containers_name)
+			print ("Avg cpu usage:"+str(avg_cpu))
+			if(avg_cpu > 0.4):
+				if(number_instance < 10):
+					number_instance += 1
+					scale(app_name, number_instance)
+					print('scale: scaled up '+app_name+' to: '+ str(number_instance))
+					print("sleep 30s...")
+					time.sleep(30)
+			elif(avg_cpu < 0.2):
+				if(number_instance > 1):
+					number_instance -= 1
+					scale(app_name, number_instance)
+					print('scale: scaled down '+app_name+' to: '+ str(number_instance))
+					print("sleep 30s...")
+					time.sleep(30)
+		except Exception as e:
+			print(e)
+		finally:
+			time.sleep(5)
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+	
+

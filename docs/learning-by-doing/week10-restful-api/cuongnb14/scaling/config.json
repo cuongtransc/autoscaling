@@ -1,0 +1,14 @@
+{
+	"influxdb" : {
+		"host" : "localhost",
+		"port" : "8086",
+		"username" : "root",
+		"password" : "root",
+		"db_name" : "cadvisor",
+		"ts_mapping" : "mapping"
+	},
+	"marathon" : {
+		"host" : "localhost",
+		"port" : "8080"
+	}
+}
