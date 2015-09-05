@@ -106,3 +106,23 @@ def get_crons():
 	"""Return all crons"""
 	apps = session.query(Cron)
 	return apps
+
+def get_policies_of_appuuid(app_uuid):
+	"""Return all policies of app_uuid
+	
+	@param string app_uuid
+	"""
+	policies = session.query(Policie).filter_by(app_uuid=app_uuid)
+	return policies
+
+def to_json(result):
+	"""Return json string of result query
+	
+	@param Base result result query
+	@return string string json
+	"""
+	list_record = []
+    for record in result:
+        list_record.append(str(record))
+    json_record = "["+",".join(list_record)+"]"
+    return json_record
