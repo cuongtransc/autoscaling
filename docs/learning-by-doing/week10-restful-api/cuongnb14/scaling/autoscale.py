@@ -4,7 +4,6 @@
 author: cuongnb14@gmail.com
 """
 
-
 from sys import argv
 import json
 from influxdb.influxdb08 import InfluxDBClient
@@ -15,9 +14,11 @@ from config import *
 from marathon import MarathonClient 
 import sys
 import logging
+import models
 
 client = InfluxDBClient(INFLUXDB["host"], INFLUXDB["port"], INFLUXDB["username"], INFLUXDB["password"], INFLUXDB["db_name"])
 marathon_client = MarathonClient('http://'+MARATHON['host']+':'+MARATHON['port'])
+app = None
 number_instance = 0
 
 logger = logging.getLogger("autoscaling")
@@ -87,27 +88,56 @@ def scale(app_name, delta):
 	logger.info("config file haproxy.cfg")
 	os.system("sudo ./servicerouter.py --marathon http://"+MARATHON["host"]+":"+MARATHON["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
+def check_rule(policie, value):
+	"""Check rule and scale if true
+	
+	@param models.Policie policies
+	@param float value value of metric type
+	@return boolean, True if violation else return False
+	"""
+	global number_instance
+	global app
+	if(policie.metric_type == 0):
+		if(value > policie.upper_threshold):
+			if(number_instance < app.max_instances):
+				scale(app.name, policie.instances_in)
+				number_instance = marathon_client.get_app(app.name).instances
+				logger.info("sleep "+str(TIME['in_up'])+"s...")
+				time.sleep(TIME['in_up'])
+			else:
+				logger.info("number intances is maximum")
+			return True
+		elif(value < policie.lower_threshold):
+			if(number_instance > app.min_instances):
+				scale(app.name, 0-policie.instances_out)
+				number_instance = marathon_client.get_app(app.name).instances
+				logger.info('scaled up done, current number intances: '+str(number_instance))
+				logger.info("sleep "+str(TIME['in_down'])+"s...")
+				time.sleep(TIME['in_down'])
+			else:
+				logger.info("number intances is minximum")
+			return True
+	if(policie.metric_type == 1):
+		pass
+	return False
+
+
 def main():
 	app_name = argv[1]
+	global app
+	app = models.get_app_of_appname(app_name)
+	global number_instance
 	number_instance = marathon_client.get_app(app_name).instances
 	while True:
 		try:
 			containers_name = get_containers_name(app_name)
 			avg_cpu = avg_cpu_usage(containers_name)
 			logger.info("avg cpu usage:"+str(avg_cpu))
-			if(avg_cpu > 0.4):
-				if(number_instance < 10):
-					scale(app_name, 1)
-					number_instance = marathon_client.get_app(app_name).instances
-					logger.info("sleep "+str(TIME['in_up'])+"s...")
-					time.sleep(TIME['in_up'])
-			elif(avg_cpu < 0.2):
-				if(number_instance > 1):
-					scale(app_name, -1)
-					number_instance = marathon_client.get_app(app_name).instances
-					logger.info('scaled up done, current number intances: '+str(number_instance))
-					logger.info("sleep "+str(TIME['in_down'])+"s...")
-					time.sleep(TIME['in_down'])
+
+			policies = models.get_policies_of_appname(app_name)
+			for policie in policies:
+				if(check_rule(policie, avg_cpu)):
+					break
 		except Exception as e:
 			logger.exception(e)
 		finally:
