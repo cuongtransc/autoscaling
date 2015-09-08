@@ -12,11 +12,11 @@ import json
 import base64
 
 def check_auth(header_author):
-    str_auth = models.MARIADB['username']+":"+models.MARIADB['password']
-    str_auth = str_auth.encode("utf-8")
-    str_auth = base64.b64encode(str_auth)
-    str_auth = "Basic "+str(str_auth,"utf-8")
-    return header_author == str_auth
+    header_author = header_author.split(' ')
+    str_usrpass = header_author[1]
+    usrpass = base64.b64decode(str_usrpass).decode("utf8")
+    author = usrpass.split(":")
+    return models.MARIADB['username'] == author[0] and models.MARIADB['password'] == author[1]
 
 def authenticate(handler):
     def wapper(request, *arg1, **arg2):
