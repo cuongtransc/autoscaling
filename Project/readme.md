@@ -1,0 +1,1 @@
+### hệ thống auto scaling
