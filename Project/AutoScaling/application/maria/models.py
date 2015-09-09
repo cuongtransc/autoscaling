@@ -23,8 +23,8 @@ class App(Base):
 	enabled = Column(Integer)
 	locked = Column(Integer)
 	next_time = Column(Integer)
-	#policies = relationship("Policie", order_by="Policie.Id", backref="app")
-	#crons = relationship("Cron", order_by="Cron.Id", backref="app")
+	policies = relationship("Policy", order_by="Policy.Id", backref="app", cascade="all, delete, delete-orphan")
+	crons = relationship("Cron", order_by="Cron.Id", backref="app", cascade="all, delete, delete-orphan")
 	def __repr__(self):
 		return '{"Id": '+str(self.Id)+', "app_uuid": "'+str(self.app_uuid)+'","name": "'+str(self.name)+'","min_instances": '+str(self.min_instances)+',"max_instances": '+str(self.max_instances)+',"enabled": '+str(self.enabled)+',"locked": '+str(self.locked)+',"next_time": '+str(self.next_time)+'}'	
 
@@ -33,7 +33,7 @@ class Policy(Base):
 
 	__tablename__ = 'policies'
 	Id = Column(Integer, primary_key=True)
-	app_uuid = Column(String, ForeignKey('apps.Id'))
+	app_uuid = Column(String, ForeignKey('apps.app_uuid'))
 	policy_uuid = Column(String)
 	metric_type = Column(Integer)
 	upper_threshold = Column(Integer)
@@ -43,7 +43,6 @@ class Policy(Base):
 	cooldown_period = Column(Integer)
 	measurement_period = Column(Integer)
 	deleted = Column(Integer)
-	#app = relationship("App", backref=backref('policies', order_by=Id))
 	def __repr__(self):
 		return '{"Id": '+str(self.Id)+', "app_uuid": "'+str(self.app_uuid)+'","metric_type": '+str(self.metric_type)+',"upper_threshold": '+str(self.upper_threshold)+',"lower_threshold": '+str(self.lower_threshold)+',"instances_out": '+str(self.instances_out)+',"instances_in": '+str(self.instances_in)+',"cooldown_period": '+str(self.cooldown_period)+', "measurement_period": '+str(self.measurement_period)+', "deleted": '+str(self.deleted)+'}'
 
@@ -58,7 +57,6 @@ class Cron(Base):
 	max_instances = Column(Integer)
 	cron_string = Column(String)
 	deleted = Column(Integer)
-	#app = relationship("App", backref=backref('crons', order_by=Id))
 
 	def __repr__(self):
 		return '{"Id": '+str(self.Id)+', "app_uuid": "'+str(self.app_uuid)+'","cron_uuid": '+str(self.cron_uuid)+',"min_instances": '+str(self.min_instances)+',"max_instances": '+str(self.max_instances)+',"cron_string": '+str(self.cron_string)+',"deleted": '+str(self.deleted)+'}'	
@@ -109,8 +107,7 @@ def get_policies_of_appname(app_name):
 	@return iter Policy
 	"""
 	app = session.query(App).filter_by(name=app_name).first()
-	policies = session.query(Policy).filter_by(app_uuid=app.app_uuid)
-	return policies
+	return app.policies
 
 def add_app(app):
 	"""Add a new record in apps table
@@ -176,6 +173,30 @@ def add_cron(cron):
 		return True
 	except Exception:
 		return False
+
+def delete_app_by_name(app_name):
+	app = session.query(App).filter_by(name=app_name).first()
+	session.delete(app)
+	session.commit()
+
+def delete_policy_by_policy_uuid(policy_uuid):
+	policy = session.query(Policy).filter_by(policy_uuid=policy_uuid).first()
+	session.delete(policy)
+	session.commit()
+
+def delete_policy_by_policy_uuid(policy_uuid):
+	policy = session.query(Policy).filter_by(policy_uuid=policy_uuid).first()
+	session.delete(policy)
+	session.commit()
+
+def delete_cron_by_cron_uuid(cron_uuid):
+	cron = session.query(Cron).filter_by(cron_uuid=cron_uuid).first()
+	session.delete(cron)
+	session.commit()
+
+def test(name):
+	app = session.query(App).filter_by(name=name).first()
+	return app.policies
 
 def to_json(result):
  	"""Return json string of result query

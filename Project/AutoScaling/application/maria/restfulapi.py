@@ -122,9 +122,35 @@ def add_cron(request):
         return web.Response(status=200,body=encode_msg("fail"))
 
 @asyncio.coroutine
+def delete_app_by_appname(request):
+    app_name = request.match_info.get("app_name")
+    models.delete_app_by_name(app_name)
+    return web.Response(status=200,body=encode_msg("success"))
+
+@asyncio.coroutine
+def delete_policy_by_policy_uuid(request):
+    policy_uuid = request.match_info.get("policy_uuid")
+    models.delete_policy_by_policy_uuid(policy_uuid)
+    return web.Response(status=200,body=encode_msg("success"))
+
+@asyncio.coroutine
+def delete_cron_by_cron_uuid(request):
+    cron_uuid = request.match_info.get("cron_uuid")
+    models.delete_cron_by_cron_uuid(cron_uuid)
+    return web.Response(status=200,body=encode_msg("success"))
+
+@asyncio.coroutine
+def test(request):
+    name = request.match_info.get("name")
+    p = models.test(name)
+    p = models.to_json(p)
+    return web.Response(status=200,body=p.encode("utf-8"))
+
+@asyncio.coroutine
 def init(loop):
     app = web.Application(loop=loop)
 
+    app.router.add_route('GET', '/df/{name}', test)
     # get policy have id id_policy
     app.router.add_route('GET', '/policy/{id_policy}', get_policy)
     # get app have id id_app
@@ -138,7 +164,7 @@ def init(loop):
     # get all cron
     app.router.add_route('GET', '/crons', get_crons)
     # get all policies of the app with app_uuid
-    app.router.add_route('GET', '/app/id/{app_uuid}/policies', get_policies_of_appuuid)
+    app.router.add_route('GET', '/app/uuid/{app_uuid}/policies', get_policies_of_appuuid)
     # get all policies of the app with app_name
     app.router.add_route('GET', '/app/name/{app_name}/policies', get_policies_of_appname)
     # get app with app_name
@@ -151,6 +177,12 @@ def init(loop):
     # add new cron
     app.router.add_route('POST', '/add/cron', add_cron)
 
+    #delete app by name
+    app.router.add_route('DELETE', '/delete/app/name/{app_name}', delete_app_by_appname)
+    #delete policy by policy_uuid
+    app.router.add_route('DELETE', '/delete/policy/uuid/{policy_uuid}', delete_policy_by_policy_uuid)
+    #delete cron by cron_uuid
+    app.router.add_route('DELETE', '/delete/cron/uuid/{cron_uuid}', delete_cron_by_cron_uuid)
 
     srv = yield from loop.create_server(app.make_handler(),'127.0.0.1', 4000)
     print("Server started at http://127.0.0.1:4000")
