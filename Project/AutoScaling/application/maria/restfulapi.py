@@ -13,8 +13,7 @@ import base64
 
 def check_auth(header_author):
     header_author = header_author.split(' ')
-    str_usrpass = header_author[1]
-    usrpass = base64.b64decode(str_usrpass).decode("utf8")
+    usrpass = base64.b64decode(header_author[1]).decode("utf8")
     author = usrpass.split(":")
     return models.MARIADB['username'] == author[0] and models.MARIADB['password'] == author[1]
 
