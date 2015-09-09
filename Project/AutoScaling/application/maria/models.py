@@ -28,7 +28,7 @@ class App(Base):
 	def __repr__(self):
 		return '{"Id": '+str(self.Id)+', "app_uuid": "'+str(self.app_uuid)+'","name": "'+str(self.name)+'","min_instances": '+str(self.min_instances)+',"max_instances": '+str(self.max_instances)+',"enabled": '+str(self.enabled)+',"locked": '+str(self.locked)+',"next_time": '+str(self.next_time)+'}'	
 
-class Policie(Base):
+class Policy(Base):
 	"""Mapping with table policies"""
 
 	__tablename__ = 'policies'
@@ -97,19 +97,19 @@ def get_policies_of_appuuid(app_uuid):
 	"""Return all policies of app_uuid
 	
 	@param string app_uuid
-	@return iter Policie
+	@return iter Policy
 	"""
-	policies = session.query(Policie).filter_by(app_uuid=app_uuid)
+	policies = session.query(Policy).filter_by(app_uuid=app_uuid)
 	return policies
 
 def get_policies_of_appname(app_name):
 	"""Return all policies of app_name
 	
 	@param string app_name
-	@return iter Policie
+	@return iter Policy
 	"""
 	app = session.query(App).filter_by(name=app_name).first()
-	policies = session.query(Policie).filter_by(app_uuid=app.app_uuid)
+	policies = session.query(Policy).filter_by(app_uuid=app.app_uuid)
 	return policies
 
 def add_app(app):
@@ -133,25 +133,25 @@ def add_app(app):
 	except Exception:
 		return False
 
-def add_policie(policie):
+def add_policy(policy):
 	"""Add a new record in policies table
 		
-	@param dict policie
+	@param dict policy
 	@return boolean, True if success, False if else
 	"""
 	try:
-		new_policie = Policie()
-		new_policie.app_uuid = policie.get("app_uuid")
-		new_policie.policy_uuid = policie.get("policy_uuid")
-		new_policie.metric_type = policie.get("metric_type", 0)
-		new_policie.upper_threshold = policie.get("upper_threshold", 0)
-		new_policie.lower_threshold = policie.get("lower_threshold", 0)
-		new_policie.instances_out = policie.get("instances_out", 0)
-		new_policie.instances_in = policie.get("instances_in", 0)
-		new_policie.cooldown_period = policie.get("cooldown_period", 0)
-		new_policie.measurement_period = policie.get("measurement_period", 0)
-		new_policie.deleted = policie.get("deleted", 0)
-		session.add(new_policie)
+		new_policy = Policy()
+		new_policy.app_uuid = policy.get("app_uuid")
+		new_policy.policy_uuid = policy.get("policy_uuid")
+		new_policy.metric_type = policy.get("metric_type", 0)
+		new_policy.upper_threshold = policy.get("upper_threshold", 0)
+		new_policy.lower_threshold = policy.get("lower_threshold", 0)
+		new_policy.instances_out = policy.get("instances_out", 0)
+		new_policy.instances_in = policy.get("instances_in", 0)
+		new_policy.cooldown_period = policy.get("cooldown_period", 0)
+		new_policy.measurement_period = policy.get("measurement_period", 0)
+		new_policy.deleted = policy.get("deleted", 0)
+		session.add(new_policy)
 		session.commit()
 		return True
 	except Exception:

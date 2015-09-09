@@ -32,11 +32,11 @@ def encode_msg(msg):
     return msg.encode('utf-8')
 
 @asyncio.coroutine
-def get_policie(request):
-    id_policie = request.match_info.get('id_policie')
-    policie = models.get_by_id(models.Policie, id_policie)
-    json_policie = str(policie)
-    return web.Response(status=200,body=json_policie.encode('utf-8'))
+def get_policy(request):
+    id_policy = request.match_info.get('id_policy')
+    policy = models.get_by_id(models.Policy, id_policy)
+    json_policy = str(policy)
+    return web.Response(status=200,body=json_policy.encode('utf-8'))
 
 @asyncio.coroutine
 def get_app(request):
@@ -54,7 +54,7 @@ def get_cron(request):
 
 @asyncio.coroutine
 def get_policies(request):
-    policies = models.get_all(models.Policie)
+    policies = models.get_all(models.Policy)
     json_policies = models.to_json(policies)
     return web.Response(status=200,body=json_policies.encode('utf-8'))
 
@@ -102,10 +102,10 @@ def add_app(request):
         return web.Response(status=200,body=encode_msg("fail"))
 
 @asyncio.coroutine
-def add_policie(request):
-    json_policie = yield from request.text()
-    policie = json.loads(json_policie)
-    result = models.add_policie(policie)
+def add_policy(request):
+    json_policy = yield from request.text()
+    policy = json.loads(json_policy)
+    result = models.add_policy(policy)
     if(result):
         return web.Response(status=200,body=encode_msg("success"))
     else:
@@ -125,8 +125,8 @@ def add_cron(request):
 def init(loop):
     app = web.Application(loop=loop)
 
-    # get policie have id id_policie
-    app.router.add_route('GET', '/policie/{id_policie}', get_policie)
+    # get policy have id id_policy
+    app.router.add_route('GET', '/policy/{id_policy}', get_policy)
     # get app have id id_app
     app.router.add_route('GET', '/app/{id_app}', get_app)
     # get cron have id id_cron
@@ -146,8 +146,8 @@ def init(loop):
 
     # add new app
     app.router.add_route('POST', '/add/app', add_app)
-    # add new policie
-    app.router.add_route('POST', '/add/policie', add_policie)
+    # add new policy
+    app.router.add_route('POST', '/add/policy', add_policy)
     # add new cron
     app.router.add_route('POST', '/add/cron', add_cron)
 
