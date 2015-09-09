@@ -34,6 +34,7 @@ class Policie(Base):
 	__tablename__ = 'policies'
 	Id = Column(Integer, primary_key=True)
 	app_uuid = Column(String, ForeignKey('apps.Id'))
+	policy_uuid = Column(String)
 	metric_type = Column(Integer)
 	upper_threshold = Column(Integer)
 	lower_threshold = Column(Integer)
@@ -110,6 +111,71 @@ def get_policies_of_appname(app_name):
 	app = session.query(App).filter_by(name=app_name).first()
 	policies = session.query(Policie).filter_by(app_uuid=app.app_uuid)
 	return policies
+
+def add_app(app):
+	"""Add a new record in apps table
+		
+	@param dict app
+	@return boolean, True if success, False if else
+	"""
+	try:
+		new_app = App()
+		new_app.app_uuid = app.get("app_uuid")
+		new_app.name = app.get("name")
+		new_app.min_instances = app.get("min_instances")
+		new_app.max_instances = app.get("max_instances")
+		new_app.enabled = app.get("enabled", 0)
+		new_app.locked = app.get("locked", 0)
+		new_app.next_time = app.get("next_time")
+		session.add(new_app)
+		session.commit()
+		return True
+	except Exception:
+		return False
+
+def add_policie(policie):
+	"""Add a new record in policies table
+		
+	@param dict policie
+	@return boolean, True if success, False if else
+	"""
+	try:
+		new_policie = Policie()
+		new_policie.app_uuid = policie.get("app_uuid")
+		new_policie.policy_uuid = policie.get("policy_uuid")
+		new_policie.metric_type = policie.get("metric_type", 0)
+		new_policie.upper_threshold = policie.get("upper_threshold", 0)
+		new_policie.lower_threshold = policie.get("lower_threshold", 0)
+		new_policie.instances_out = policie.get("instances_out", 0)
+		new_policie.instances_in = policie.get("instances_in", 0)
+		new_policie.cooldown_period = policie.get("cooldown_period", 0)
+		new_policie.measurement_period = policie.get("measurement_period", 0)
+		new_policie.deleted = policie.get("deleted", 0)
+		session.add(new_policie)
+		session.commit()
+		return True
+	except Exception:
+		return False
+
+def add_cron(cron):
+	"""Add a new record in crons table
+		
+	@param dict cron
+	@return boolean, True if success, False if else
+	"""
+	try:
+		new_cron = Cron()
+		new_cron.app_uuid = cron.get("app_uuid")
+		new_cron.cron_uuid = cron.get("cron_uuid")
+		new_cron.min_instances = cron.get("min_instances", 0)
+		new_cron.max_instances = cron.get("max_instances", 0)
+		new_cron.cron_string = cron.get("cron_string", "")
+		new_cron.deleted = cron.get("deleted", 0)
+		session.add(new_cron)
+		session.commit()
+		return True
+	except Exception:
+		return False
 
 def to_json(result):
  	"""Return json string of result query

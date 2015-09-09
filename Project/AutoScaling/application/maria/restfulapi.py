@@ -27,6 +27,10 @@ def authenticate(handler):
             return handler(request, *arg1, **arg2)
     return wapper
 
+def encode_msg(msg):
+    msg = '{"message": "'+msg+'"}'
+    return msg.encode('utf-8')
+
 @asyncio.coroutine
 def get_policie(request):
     id_policie = request.match_info.get('id_policie')
@@ -88,10 +92,39 @@ def get_app_by_appname(request):
     return web.Response(status=200,body=str(app).encode('utf-8'))
 
 @asyncio.coroutine
+def add_app(request):
+    json_app = yield from request.text()
+    app = json.loads(json_app)
+    result = models.add_app(app)
+    if(result):
+        return web.Response(status=200,body=encode_msg("success"))
+    else:
+        return web.Response(status=200,body=encode_msg("fail"))
+
+@asyncio.coroutine
+def add_policie(request):
+    json_policie = yield from request.text()
+    policie = json.loads(json_policie)
+    result = models.add_policie(policie)
+    if(result):
+        return web.Response(status=200,body=encode_msg("success"))
+    else:
+        return web.Response(status=200,body=encode_msg("fail"))
+
+@asyncio.coroutine
+def add_cron(request):
+    json_cron = yield from request.text()
+    cron = json.loads(json_cron)
+    result = models.add_cron(cron)
+    if(result):
+        return web.Response(status=200,body=encode_msg("success"))
+    else:
+        return web.Response(status=200,body=encode_msg("fail"))
+
+@asyncio.coroutine
 def init(loop):
     app = web.Application(loop=loop)
 
-    #app.router.add_route('POST', '/add/policie', add_policie)
     # get policie have id id_policie
     app.router.add_route('GET', '/policie/{id_policie}', get_policie)
     # get app have id id_app
@@ -111,6 +144,12 @@ def init(loop):
     # get app with app_name
     app.router.add_route('GET', '/app/name/{app_name}', get_app_by_appname)
 
+    # add new app
+    app.router.add_route('POST', '/add/app', add_app)
+    # add new policie
+    app.router.add_route('POST', '/add/policie', add_policie)
+    # add new cron
+    app.router.add_route('POST', '/add/cron', add_cron)
 
 
     srv = yield from loop.create_server(app.make_handler(),'127.0.0.1', 4000)
