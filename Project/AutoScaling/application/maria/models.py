@@ -109,94 +109,67 @@ def get_policies_of_appname(app_name):
 	app = session.query(App).filter_by(name=app_name).first()
 	return app.policies
 
-def add_app(app):
-	"""Add a new record in apps table
-		
-	@param dict app
-	@return boolean, True if success, False if else
+def add_row(table_class, data):
+	"""Add a new record in table mapping with table_class
+	
+	@param Base table_class, ex: models.App ...
+	@param dict data
 	"""
 	try:
-		new_app = App()
-		new_app.app_uuid = app.get("app_uuid")
-		new_app.name = app.get("name")
-		new_app.min_instances = app.get("min_instances")
-		new_app.max_instances = app.get("max_instances")
-		new_app.enabled = app.get("enabled", 0)
-		new_app.locked = app.get("locked", 0)
-		new_app.next_time = app.get("next_time")
-		session.add(new_app)
+		new_row = table_class()
+		for key in data:
+			setattr(new_row, key, data[key])
+		session.add(new_row)
 		session.commit()
 		return True
 	except Exception:
 		return False
 
-def add_policy(policy):
-	"""Add a new record in policies table
-		
-	@param dict policy
-	@return boolean, True if success, False if else
-	"""
-	try:
-		new_policy = Policy()
-		new_policy.app_uuid = policy.get("app_uuid")
-		new_policy.policy_uuid = policy.get("policy_uuid")
-		new_policy.metric_type = policy.get("metric_type", 0)
-		new_policy.upper_threshold = policy.get("upper_threshold", 0)
-		new_policy.lower_threshold = policy.get("lower_threshold", 0)
-		new_policy.instances_out = policy.get("instances_out", 0)
-		new_policy.instances_in = policy.get("instances_in", 0)
-		new_policy.cooldown_period = policy.get("cooldown_period", 0)
-		new_policy.measurement_period = policy.get("measurement_period", 0)
-		new_policy.deleted = policy.get("deleted", 0)
-		session.add(new_policy)
-		session.commit()
-		return True
-	except Exception:
-		return False
+def update_app(app_name, new_data):
+	app = session.query(App).filter_by(name=app_name).first()
+	for key in new_data.keys():
+		setattr(app, key, new_data[key])
+	session.commit()
 
-def add_cron(cron):
-	"""Add a new record in crons table
-		
-	@param dict cron
-	@return boolean, True if success, False if else
-	"""
-	try:
-		new_cron = Cron()
-		new_cron.app_uuid = cron.get("app_uuid")
-		new_cron.cron_uuid = cron.get("cron_uuid")
-		new_cron.min_instances = cron.get("min_instances", 0)
-		new_cron.max_instances = cron.get("max_instances", 0)
-		new_cron.cron_string = cron.get("cron_string", "")
-		new_cron.deleted = cron.get("deleted", 0)
-		session.add(new_cron)
-		session.commit()
-		return True
-	except Exception:
-		return False
+def update_pilocy(policy_uuid, new_data):
+	policy = session.query(Policy).filter_by(policy_uuid=policy_uuid).first()
+	for key in new_data.keys():
+		setattr(policy, key, new_data[key])
+	session.commit()
+
+def update_cron(cron_uuid, new_data):
+	cron = session.query(Cron).filter_by(cron_uuid=cron_uuid).first()
+	for key in new_data.keys():
+		setattr(cron, key, new_data[key])
+	session.commit()
 
 def delete_app_by_name(app_name):
+	"""Delete app (and app's policies app's cron) have name app_app.
+
+	@param string app_name
+	"""
 	app = session.query(App).filter_by(name=app_name).first()
 	session.delete(app)
 	session.commit()
 
 def delete_policy_by_policy_uuid(policy_uuid):
+	"""Delete policy have uuid is policy_uuid
+	
+	@param string policy_uuid
+	"""
 	policy = session.query(Policy).filter_by(policy_uuid=policy_uuid).first()
 	session.delete(policy)
 	session.commit()
 
-def delete_policy_by_policy_uuid(policy_uuid):
-	policy = session.query(Policy).filter_by(policy_uuid=policy_uuid).first()
-	session.delete(policy)
-	session.commit()
 
 def delete_cron_by_cron_uuid(cron_uuid):
+	"""Delete cron have uuid is cron_uuid
+	
+	@param string cron_uuid
+	"""
 	cron = session.query(Cron).filter_by(cron_uuid=cron_uuid).first()
 	session.delete(cron)
 	session.commit()
-
-def test(name):
-	app = session.query(App).filter_by(name=name).first()
-	return app.policies
 
 def to_json(result):
  	"""Return json string of result query

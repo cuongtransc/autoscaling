@@ -95,7 +95,7 @@ def get_app_by_appname(request):
 def add_app(request):
     json_app = yield from request.text()
     app = json.loads(json_app)
-    result = models.add_app(app)
+    result = models.add_row(models.App, app)
     if(result):
         return web.Response(status=200,body=encode_msg("success"))
     else:
@@ -105,7 +105,7 @@ def add_app(request):
 def add_policy(request):
     json_policy = yield from request.text()
     policy = json.loads(json_policy)
-    result = models.add_policy(policy)
+    result = models.add_row(models.Policy, policy)
     if(result):
         return web.Response(status=200,body=encode_msg("success"))
     else:
@@ -115,7 +115,7 @@ def add_policy(request):
 def add_cron(request):
     json_cron = yield from request.text()
     cron = json.loads(json_cron)
-    result = models.add_cron(cron)
+    result = models.add_row(models.Cron, cron)
     if(result):
         return web.Response(status=200,body=encode_msg("success"))
     else:
@@ -140,17 +140,18 @@ def delete_cron_by_cron_uuid(request):
     return web.Response(status=200,body=encode_msg("success"))
 
 @asyncio.coroutine
-def test(request):
-    name = request.match_info.get("name")
-    p = models.test(name)
-    p = models.to_json(p)
-    return web.Response(status=200,body=p.encode("utf-8"))
+def update_app(request):
+    app_name = request.match_info.get("app_name")
+    json_new_data = yield from request.text()
+    new_data = json.loads(json_new_data)
+    models.update_app(app_name, new_data)
+    return web.Response(status=200,body=encode_msg("success"))
+
 
 @asyncio.coroutine
 def init(loop):
     app = web.Application(loop=loop)
 
-    app.router.add_route('GET', '/df/{name}', test)
     # get policy have id id_policy
     app.router.add_route('GET', '/policy/{id_policy}', get_policy)
     # get app have id id_app
@@ -183,6 +184,10 @@ def init(loop):
     app.router.add_route('DELETE', '/delete/policy/uuid/{policy_uuid}', delete_policy_by_policy_uuid)
     #delete cron by cron_uuid
     app.router.add_route('DELETE', '/delete/cron/uuid/{cron_uuid}', delete_cron_by_cron_uuid)
+
+    #update app_name
+    app.router.add_route('PUT', '/update/app/{app_name}', update_app)
+
 
     srv = yield from loop.create_server(app.make_handler(),'127.0.0.1', 4000)
     print("Server started at http://127.0.0.1:4000")
