@@ -172,21 +172,21 @@ def init(loop):
     app.router.add_route('GET', '/app/name/{app_name}', get_app_by_appname)
 
     # add new app
-    app.router.add_route('POST', '/add/app', add_app)
+    app.router.add_route('POST', '/app', add_app)
     # add new policy
-    app.router.add_route('POST', '/add/policy', add_policy)
+    app.router.add_route('POST', '/policy', add_policy)
     # add new cron
-    app.router.add_route('POST', '/add/cron', add_cron)
+    app.router.add_route('POST', '/cron', add_cron)
 
     #delete app by name
-    app.router.add_route('DELETE', '/delete/app/name/{app_name}', delete_app_by_appname)
+    app.router.add_route('DELETE', '/app/name/{app_name}', delete_app_by_appname)
     #delete policy by policy_uuid
-    app.router.add_route('DELETE', '/delete/policy/uuid/{policy_uuid}', delete_policy_by_policy_uuid)
+    app.router.add_route('DELETE', '/policy/uuid/{policy_uuid}', delete_policy_by_policy_uuid)
     #delete cron by cron_uuid
-    app.router.add_route('DELETE', '/delete/cron/uuid/{cron_uuid}', delete_cron_by_cron_uuid)
+    app.router.add_route('DELETE', '/cron/uuid/{cron_uuid}', delete_cron_by_cron_uuid)
 
     #update app_name
-    app.router.add_route('PUT', '/update/app/{app_name}', update_app)
+    app.router.add_route('PUT', '/app/{app_name}', update_app)
 
 
     srv = yield from loop.create_server(app.make_handler(),'127.0.0.1', 4000)
