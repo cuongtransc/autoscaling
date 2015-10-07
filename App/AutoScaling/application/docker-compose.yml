@@ -1,0 +1,146 @@
+#Author: Ba Cuong 
+
+################################################################################################
+########################################## MONITORING ##########################################
+################################################################################################
+influxsrv:
+  image: "tutum/influxdb:0.8.8"
+  ports:
+    - "8083:8083"
+    - "8086:8086"
+  expose:
+    - "8090"
+    - "8099"
+  environment:
+    - PRE_CREATE_DB=cadvisor
+cadvisor:
+  image: "google/cadvisor:0.14.0"
+  volumes:
+    - "/:/rootfs:ro"
+    - "/var/run:/var/run:rw"
+    - "/sys:/sys:ro"
+    - "/var/lib/docker/:/var/lib/docker:ro"
+  links:
+    - "influxsrv:influxsrv"
+  ports:
+    - "8081:8080"
+  command: "-storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086"
+
+################################################################################################
+########################################## MESOSPHERE ##########################################
+################################################################################################
+
+# Based on https://github.com/breerly/fig-mesos
+# Note: use links: as a dependency graph for now, until https://github.com/docker/fig/pull/686 is resolved
+#
+# Zookeeper
+#
+# https://registry.hub.docker.com/u/jplock/zookeeper/
+#
+zk1:
+  image: jplock/zookeeper:3.4.6
+
+#
+# Mesos master
+#
+# https://registry.hub.docker.com/u/redjack/mesos-master/
+# http://mesos.apache.org/documentation/latest/configuration/
+#
+mesos1:
+  image: redjack/mesos-master:0.21.0
+  ports:
+    - "5050:5050"
+  links:
+    - "zk1:zookeeper1"
+  environment:
+    MESOS_LOG_DIR: /var/log
+    MESOS_CLUSTER: localmesos
+    MESOS_ZK: zk://zookeeper1:2181/mesos
+    MESOS_HOSTNAME: 172.17.42.1
+    MESOS_WORK_DIR: /var/lib/mesos
+    MESOS_QUORUM: 1
+
+#
+# Mesos slaves
+#
+# https://registry.hub.docker.com/u/redjack/mesos-slave/
+# http://mesos.apache.org/documentation/latest/configuration/
+#
+slave1:
+  image: redjack/mesos-slave:0.21.0
+  ports:
+    - "5051:5051"
+  links:
+    - "zk1:zookeeper1"
+    - "mesos1"
+  environment:
+    MESOS_MASTER: zk://zookeeper1:2181/mesos
+    MESOS_ISOLATOR: "cgroups/cpu,cgroups/mem"
+    MESOS_CONTAINERIZERS: "docker,mesos"
+    MESOS_EXECUTOR_REGISTRATION_TIMEOUT: "5mins"
+    MESOS_HOSTNAME: 172.17.42.1
+    MESOS_PORT: "5051"
+    MESOS_LOG_DIR: /var/log
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /usr/bin/docker:/usr/bin/docker
+    - /sys/fs/cgroup:/sys/fs/cgroup
+
+#
+# Marathon
+#
+# https://registry.hub.docker.com/u/mesosphere/marathon/
+#
+marathon:
+  image: mesosphere/marathon:v0.8.1
+  ports:
+    - "8080:8080"
+  links:
+    - "zk1:zookeeper1"
+    - "mesos1"
+  command: "--master zk://zookeeper1:2181/mesos --zk zk://zookeeper1:2181/marathon"
+
+################################################################################################
+########################################## MAPPING DOCKERID - MESOSSID ##########################
+################################################################################################
+
+mapping:
+    image: cocu/docker-mapping-mesos:0.1
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
+
+    environment:
+        - INFLUXDB_HOST=172.17.42.1
+        - INFLUXDB_PORT=8086
+        - INFLUXDB_NAME=cadvisor
+        - INFLUXDB_USER=root
+        - INFLUXDB_PASS=root
+        - TIME_INTERVAL=10
+
+#################################################
+#####################        #########################
+#################################################
+# docker image: https://hub.docker.com/_/mariadb/
+#
+
+# mariadb:
+#     image: mariadb:10.0
+#     ports:
+#         - "3306:3306"
+#     volumes:
+#         - ./mariadb-data/:/var/lib/mysql/
+#     environment:
+#         - MYSQL_ROOT_PASSWORD=autoscaling@secret
+#         - MYSQL_USER=autoscaling
+#         - MYSQL_PASSWORD=autoscaling@123
+#         - MYSQL_DATABASE=autoscaling
+#     hostname: mariadb
+#     domainname: teamlab.lan
+#     cpu_shares: 512         # like 0.5 core CPU
+#     mem_limit: 536870912    # 512 MB
+    # privileged: true
+    # restart: always
+    # stdin_open: true
+    # tty: true
+
