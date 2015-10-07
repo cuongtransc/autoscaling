@@ -4,7 +4,7 @@
 author: cuongnb14@gmail.com
 """
 
-import models
+import models.models as models
 import asyncio
 from aiohttp import web
 import aiohttp

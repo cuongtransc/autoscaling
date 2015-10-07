@@ -1,9 +1,0 @@
-{
-	"app_uuid": "dffd-23-ffddf-dfds",
-	"name": "webapp2",
-	"min_instances": 1,
-	"max_instances": 1,
-	"enabled": 1,
-	"locked": 0,
-	"next_time": 0
-}

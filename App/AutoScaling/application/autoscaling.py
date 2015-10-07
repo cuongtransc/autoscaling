@@ -86,7 +86,7 @@ def scale(app_name, delta):
 	logger.info("waiting for config file haproxy.cfg...")
 	time.sleep(TIME['w_config_ha'])
 	logger.info("config file haproxy.cfg")
-	os.system("sudo ./marathon/servicerouter.py --marathon http://"+MARATHON["host"]+":"+MARATHON["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
+	os.system("sudo ./servicerouter.py --marathon http://"+MARATHON["host"]+":"+MARATHON["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
 def check_rule(policie, value):
 	"""Check rule and scale if true

@@ -1,0 +1,73 @@
+#Author: Ba Cuong 
+
+################################################################################################
+########################################## MONITORING ##########################################
+################################################################################################
+influxsrv:
+  image: "tutum/influxdb:0.8.8"
+  ports:
+    - "8083:8083"
+    - "8086:8086"
+  expose:
+    - "8090"
+    - "8099"
+  environment:
+    - PRE_CREATE_DB=cadvisor
+cadvisor:
+  image: "google/cadvisor:0.14.0"
+  volumes:
+    - "/:/rootfs:ro"
+    - "/var/run:/var/run:rw"
+    - "/sys:/sys:ro"
+    - "/var/lib/docker/:/var/lib/docker:ro"
+  links:
+    - "influxsrv:influxsrv"
+  ports:
+    - "8081:8080"
+  command: "-storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086"
+
+
+################################################################################################
+########################################## MAPPING DOCKERID - MESOSSID ##########################
+################################################################################################
+
+mapping:
+    image: cocu/docker-mapping-mesos:0.1
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
+
+    environment:
+        - INFLUXDB_HOST=172.17.42.1
+        - INFLUXDB_PORT=8086
+        - INFLUXDB_NAME=cadvisor
+        - INFLUXDB_USER=root
+        - INFLUXDB_PASS=root
+        - TIME_INTERVAL=10
+
+#################################################
+#####################  Rule for applications      #########################
+#################################################
+docker image: https://hub.docker.com/_/mariadb/
+
+
+mariadb:
+    image: mariadb:10.0
+    ports:
+        - "3306:3306"
+    volumes:
+        - ./mariadb-data/:/var/lib/mysql/
+    environment:
+        - MYSQL_ROOT_PASSWORD=autoscaling@secret
+        - MYSQL_USER=autoscaling
+        - MYSQL_PASSWORD=autoscaling@123
+        - MYSQL_DATABASE=autoscaling
+    hostname: mariadb
+    domainname: teamlab.lan
+    cpu_shares: 512         # like 0.5 core CPU
+    mem_limit: 536870912    # 512 MB
+    privileged: true
+    restart: always
+    stdin_open: true
+    tty: true
+
