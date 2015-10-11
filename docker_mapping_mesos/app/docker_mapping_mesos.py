@@ -32,8 +32,10 @@ def get_list_dockerid_mapping_mesosid():
             for env in container_env:
                 if env.startswith('MESOS_TASK_ID'):
                     dockerid_mapping_mesosid.append(env.split('=')[1])
+                    break
 
-            list_dockerid_mapping_mesosid.append(dockerid_mapping_mesosid)
+            if len(dockerid_mapping_mesosid) == 2:
+                list_dockerid_mapping_mesosid.append(dockerid_mapping_mesosid)
 
     return list_dockerid_mapping_mesosid
 
