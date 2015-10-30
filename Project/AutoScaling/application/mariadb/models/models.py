@@ -3,8 +3,8 @@
 author: cuongnb14
 """
 
-from base_models import *
-from config import *
+from .base_models import *
+from .config import *
 engine = create_engine("mysql://"+MARIADB['username']+":"+MARIADB['password']+"@"+MARIADB['host']+":"+MARIADB['port']+"/"+MARIADB['dbname'], encoding='utf-8', echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
