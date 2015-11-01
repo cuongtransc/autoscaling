@@ -1,0 +1,13 @@
+mapping:
+  image: "cocu/docker-mapping-mesos:0.1"	
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"    		
+  environment:
+    - INFLUXDB_HOST=influxsrv 
+    - INFLUXDB_PORT=8086 
+    - INFLUXDB_NAME=cadvisor 
+    - INFLUXDB_USER=root 
+    - INFLUXDB_PASS=root 
+    - TIME_INTERVAL=10 	
+  links:
+    - "influxSrv:influxsrv"

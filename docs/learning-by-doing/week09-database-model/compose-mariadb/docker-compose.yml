@@ -6,8 +6,8 @@ mariadb:
     image: mariadb:10.0
     ports:
         - "3306:3306"
-    volumes:
-        - ./mariadb-data/:/var/lib/mysql/
+    #volumes:
+    #    - ./mariadb-data/:/var/lib/mysql/
     environment:
         - MYSQL_ROOT_PASSWORD=autoscaling@secret
         - MYSQL_USER=autoscaling
