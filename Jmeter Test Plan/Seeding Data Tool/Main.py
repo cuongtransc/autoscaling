@@ -1,4 +1,4 @@
-#!/usr/bin/python
+
 __author__ = 'huanpc'
 
 import constant
@@ -21,15 +21,17 @@ def getID():
     db = MySQLdb.connect(host=config.HOST, user=config.USER, passwd=config.PASSWORD,db=config.DB)
     cur = db.cursor()
     cur.execute("SELECT customer_id FROM "+config.TABLE_CUSTOMER+" order by customer_id desc limit 1")
-    tm = cur.fetchone()[0]
+    tm = cur.fetchone()
     if tm == None:
-        tm = 0
-    customer_id_begin = tm
+        customer_id_begin  = 0
+    else:
+        customer_id_begin = tm[0]
     cur.execute("SELECT address_id FROM "+config.TABLE_ADDRESS+" order by address_id desc limit 1")
-    tm = cur.fetchone()[0]
+    tm = cur.fetchone()
     if tm == None:
-        tm = 0
-    address_id_begin = tm
+        address_id_begin = 0
+    else:
+        address_id_begin = tm[0]
     return [customer_id_begin,address_id_begin]
 
 # Tao du lieu nguoi dung
