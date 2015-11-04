@@ -61,7 +61,6 @@ def createCustomerInforData():
         i += 1
         f.write(line + '\n')
     f.close()
-   print "\nDONE!!"
 
 # def createProductData():
 # Tao du lieu mau khi dang ky tai khoan
