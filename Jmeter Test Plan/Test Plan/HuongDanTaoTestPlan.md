@@ -71,6 +71,19 @@ Trong bài viết này mình sử dụng FireFox (new 5/11/2015).
 ![alt text][19]
 
 
+[1]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/1.png
+[3]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/3.png
+[5]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/5.png
+[6]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/6.png
+[8]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/8.png
+[10]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/10.png
+[12]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/12.png
+[13]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/13.png
+[18]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/18.png
+[19]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/19.png
+
+
+
 ### Register
 
 
