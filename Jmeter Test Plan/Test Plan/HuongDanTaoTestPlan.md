@@ -2,13 +2,13 @@
 Doc hướng dẫn việc tạo ra thiết lập file OpenCart.jmx
 
 ## Xây dựng kịch bản test
-###### Kịch bản test bao gồm các bước:
+### Kịch bản test bao gồm các bước:
 1. Register.
 2. Login.
 3. Order by Guest.
 4. Order by User.
 
-###### Yêu cầu của việc thực hiện test trên Jmeter là đã thực hiện sinh dữ liệu ra file csv. File csv bao gồm các cột, với thông tin trên từng cột lần lượt là
+### Yêu cầu của việc thực hiện test trên Jmeter là đã thực hiện sinh dữ liệu ra file csv. File csv bao gồm các cột, với thông tin trên từng cột lần lượt là
 1. customer_id
 2. customer_group_id
 3. firstname
@@ -84,7 +84,54 @@ Trong bài viết này mình sử dụng FireFox (new 5/11/2015).
 
 
 
-### Register
+### Kịch bản cho Register
+Tư tưởng: tạo dữ liệu mẫu rồi lưu bằng file csv, rồi lấy thông tin từ file csv, sau đó truyền vào để thực hiện register. 
+sau đây là các bước cặn kẽ trong Kịch bản Register.
+
+1. Trước tiên sử dụng proxy + tay để tạo ra được cấu trúc TestPlan như hình dưới. Trong hình ta thấy được là chúng ta đẵ đặt biên cho toàn bộ TestPlan là HOST:localhost và port:80
+
+![alt text][21]
+
+2. Thực hiện import csv và đưa nó ra thành các biến toàn cục
+
+![alt text][22]
+
+3. Cài đặt HTTP Request Default.
+
+![alt text][23]
+
+4. Load trang chủ
+
+![alt text][24]
+
+5. Các request mà brower gửi đi khi load form.
+
+![alt text][25]
+
+6. Phương thức POST gửi các thông tin đi.
+
+![alt text][26]
+
+7. Chuyển hướng khi register thành công
+
+![alt text][28]
+
+8. Chuyển hướng khi logout
+
+![alt text][29]
+
+
+Để thực hiện chạy test, chạy lệnh #### CTR + R
+
+
+[21]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/21.png
+[22]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/22.png
+[23]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/23.png
+[24]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/24.png
+[25]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/25.png
+[26]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/26.png
+[28]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/28.png
+[29]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/29.png
 
 
 
