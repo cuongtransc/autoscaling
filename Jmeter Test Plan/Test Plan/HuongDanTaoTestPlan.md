@@ -133,21 +133,18 @@ sau đây là các bước cặn kẽ trong Kịch bản Register.
 [28]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/28.png
 [29]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/29.png
 
-## How to make Test Plan with Jmeter
-1. Ghi lại request + parameter bằng HTTP Script Recording
-2. Tạo Register test case
-3. Tạo Make Order test case
-4. .....
-
 ### Tạo kịch bản Make Order với trường hợp khách hàng có tài khoản.
-`Yêu cầu: Người dùng đã có tài khoản`
+
+> *`Yêu cầu: Người dùng đã có tài khoản`*
+
 1. Dùng `HTTP(S) Test Script Recorder + Recording Controller`  để ghi lại định dạng các request cần thực hiện. ![image][30]
 2. Các tham số để tạo request lấy từ bộ dữ liệu csv đã tạo . ![image][31]
 3. Điền tham số `username`, `password ` vào Login Post request ![image][32]
 4. Tạo  `If controller `để thực hiện rẽ nhánh theo từng  trạng thái của Login request ở trên.
  - Nếu Login thành công, thực hiện nhánh ![image][33]
-    - Điền các tham số hóa vào trường Parameters ![image][35]
+   - Điền các tham số hóa vào trường Parameters ![image][35]
  - Nếu Login thất bại, thực hiện nhánh 2 ![image][34]
+
 5. Dùng `Aggregate Report + Aggregate Graph` để thống kê các request thành công, thất bại, tốc độ trung bình ... ![image][36]	
 
 [30]: https://github.com/tranhuucuong91/autoscaling/blob/master/Jmeter%20Test%20Plan/Test%20Plan/images/30.png
