@@ -76,7 +76,7 @@ class Scaler:
 		tasks = self.marathon_client.list_tasks(self.app["name"])
 		containers_name = []
 		for task in tasks:
-			containers_name.append(get_container_name(task.id))
+			containers_name.append(self.get_container_name(task.id))
 		return containers_name
 
 	def avg_mem_usage(self, containers_name):
@@ -166,16 +166,16 @@ class Scaler:
 				rs_detal['up'] = 0
 				rs_detal['down'] = 10
 				for policie in self.app["policies"]:
-					delta = check_rule(self.policie, (cpu, mem))
+					delta = self.check_rule(self.policie, (cpu, mem))
 					if(rs_detal['up'] < delta['up']):
 						rs_detal['up'] = delta['up']
 					if(rs_detal['down'] > delta['down']):
 						rs_detal['down'] = delta['down']
 
 				if(rs_detal['up'] > 0):
-					 scale(self.app["name"], rs_detal['up'])
+					self.scale(self.app["name"], rs_detal['up'])
 				elif(rs_detal['down'] > 0):
-					scale(self.app["name"], 0-rs_detal['down'])
+					self.scale(self.app["name"], 0-rs_detal['down'])
 			except Exception as e:
 				self.logger.exception(e)
 			finally:
