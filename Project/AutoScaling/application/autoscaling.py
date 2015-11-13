@@ -88,12 +88,13 @@ class Scaler:
 		number_container = len(containers_name)
 		containers_name = ["'"+x+"'" for x in containers_name]
 		containers_name = ",".join(containers_name)
-		query = "select memory_usage,container_name from stats where  time > now()-5m and  container_name in ("+containers_name+")  limit "+str(number_container)
+		query = "select memory_usage,container_name from stats where  time > now()-5m and  container_name in ("+containers_name+")  limit "+str(number_container*2)
 		result = self.influx_client.query(query)
 		points = result[0]["points"]
 		sum_memory_usage = 0
 		for point in points:
-			sum_memory_usage += points[0][1]/(self.app["mem"]*1073741824)*100
+			if(points[0][1] != None):
+				sum_memory_usage += point[3]/(self.app["mem"]*1048576)*100
 		return sum_memory_usage / number_container
 
 	def avg_cpu_usage(self, containers_name):
@@ -108,10 +109,9 @@ class Scaler:
 		query = "select DERIVATIVE(cpu_cumulative_usage)  as cpu_usage,container_name from stats where  time > now()-5m and  container_name in ("+containers_name+") group by time(10s),container_name limit "+str(number_container)
 		result = self.influx_client.query(query)
 		points = result[0]["points"]
-		#return points[0][1]/1000000000/self.app["cpus"]*100
 		sum_cpu_usage = 0
 		for point in points:
-			sum_cpu_usage += points[0][1]/1000000000/self.app["cpus"]*100
+			sum_cpu_usage += point[1]/1000000000/self.app["cpus"]*100
 		return sum_cpu_usage / number_container
 
 	def scale(self, delta):
