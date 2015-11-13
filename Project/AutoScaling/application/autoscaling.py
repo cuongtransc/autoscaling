@@ -93,7 +93,7 @@ class Scaler:
 		points = result[0]["points"]
 		sum_memory_usage = 0
 		for point in points:
-			if(points[0][1] != None):
+			if(points[3] != None):
 				sum_memory_usage += point[3]/(self.app["mem"]*1048576)*100
 		return sum_memory_usage / number_container
 
