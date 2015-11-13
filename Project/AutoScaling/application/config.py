@@ -4,7 +4,7 @@ author: cuongnb14@gmail.com
 CONFIG = {
 
 	# Config influxdb host
-	"INFLUXDB" = {
+	"INFLUXDB" : {
 		"host": "localhost",
 		"port" : "8086",
 		"username" : "root",
@@ -14,7 +14,7 @@ CONFIG = {
 	},
 
 	# Config marathon host
-	"MARATHON" = {
+	"MARATHON" : {
 		"host" : "localhost",
 		"port" : "8080"
 	},
@@ -22,7 +22,7 @@ CONFIG = {
 	# Config times 
 	# w_config_ha: time wait to config haproxy.cfg affter scale
 
-	"TIME" = {
+	"TIME" : {
 		"w_config_ha" : 30,
 		"v_up" : 5,
 		"after_scale" : 30,
@@ -30,7 +30,7 @@ CONFIG = {
 		"monitor" : 5
 	},
 
-	"MARIA_RESTFUL" = {
+	"MARIA_RESTFUL" : {
 		"host": "localhost",
 		"port": 4000
 	}
