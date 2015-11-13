@@ -62,7 +62,7 @@ class Scaler:
 		
 		@param string mesos_task_id
 		"""
-		query = "select container_name from "+config["INFLUXDB"]["ts_mapping"]+" where time>now() - 5m and mesos_task_id = '" +mesos_task_id+"' limit 1" 
+		query = "select container_name from "+self.config["INFLUXDB"]["ts_mapping"]+" where time>now() - 5m and mesos_task_id = '" +mesos_task_id+"' limit 1" 
 		result = self.influx_client.query(query)
 		points = result[0]["points"]
 		return points[0][2]
@@ -131,7 +131,7 @@ class Scaler:
 			self.logger.info("Waiting for config file haproxy.cfg...")
 			time.sleep(self.config["TIME"]['w_config_ha'])
 			self.logger.info("Config file haproxy.cfg...")
-			os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
+			os.system("sudo ./servicerouter.py --marathon http://"+self.config["MARATHON"]["host"]+":"+self.config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 			self.app["instance"] = marathon_client.get_app(self.app["name"]).instances
 			self.logger.info("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
 			time.sleep(self.config["TIME"]['after_scale'])
