@@ -42,8 +42,6 @@ class Scaler:
 		self.app["mem"] = self.marathon_client.get_app(app_name).mem
 		self.app["cpus"] = self.marathon_client.get_app(app_name).cpus
 
-		
-
 		self.logger.info("Reconfig haproxy.cfg...")
 		os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
@@ -116,27 +114,27 @@ class Scaler:
 			sum_cpu_usage += points[0][1]/1000000000/self.app["cpus"]*100
 		return sum_cpu_usage / number_container
 
-def scale(self, delta):
-	"""sacle app_name (add or remove) delta intances
-	
-	@param string app_name name of application
-	@param int delta number intances add or remove
-	"""
-	new_instance = self.app["instance"] + delta
-	if(new_instance > self.app['max_instances']):
-		new_instance = self.app['max_instances']
-	if(new_instance < self.app['min_instances']):
-		new_instance = self.app['min_instances']
-	if(new_instance != self.app["instance"]):
-		self.marathon_client.scale_app(self.app["name"], new_instance)
-		self.logger.info("Scaling "+self.app["name"]+" to: "+str(new_instance))
-		self.logger.info("Waiting for config file haproxy.cfg...")
-		time.sleep(self.config["TIME"]['w_config_ha'])
-		self.logger.info("Config file haproxy.cfg...")
-		os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
-		self.app["instance"] = marathon_client.get_app(self.app["name"]).instances
-		self.logger.info("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
-		time.sleep(self.config["TIME"]['after_scale'])
+	def scale(self, delta):
+		"""sacle app_name (add or remove) delta intances
+		
+		@param string app_name name of application
+		@param int delta number intances add or remove
+		"""
+		new_instance = self.app["instance"] + delta
+		if(new_instance > self.app['max_instances']):
+			new_instance = self.app['max_instances']
+		if(new_instance < self.app['min_instances']):
+			new_instance = self.app['min_instances']
+		if(new_instance != self.app["instance"]):
+			self.marathon_client.scale_app(self.app["name"], new_instance)
+			self.logger.info("Scaling "+self.app["name"]+" to: "+str(new_instance))
+			self.logger.info("Waiting for config file haproxy.cfg...")
+			time.sleep(self.config["TIME"]['w_config_ha'])
+			self.logger.info("Config file haproxy.cfg...")
+			os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
+			self.app["instance"] = marathon_client.get_app(self.app["name"]).instances
+			self.logger.info("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
+			time.sleep(self.config["TIME"]['after_scale'])
 
 
 	def check_rule(self, policie, value, type):
