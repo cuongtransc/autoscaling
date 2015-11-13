@@ -38,9 +38,9 @@ class Scaler:
 		self.influx_client = InfluxDBClient(config["INFLUXDB"]["host"], config["INFLUXDB"]["port"], config["INFLUXDB"]["username"], config["INFLUXDB"]["password"], config["INFLUXDB"]["db_name"])
 		self.marathon_client = MarathonClient('http://'+config["MARATHON"]['host']+':'+config["MARATHON"]['port'])
 		
-		self.app["instance"] = marathon_client.get_app(app_name).instances
-		self.app["mem"] = marathon_client.get_app(app_name).mem
-		self.app["cpus"] = marathon_client.get_app(app_name).cpus
+		self.app["instance"] = self.marathon_client.get_app(app_name).instances
+		self.app["mem"] = self.marathon_client.get_app(app_name).mem
+		self.app["cpus"] = self.marathon_client.get_app(app_name).cpus
 
 		
 
