@@ -1,8 +1,8 @@
 __author__ = 'huanpc'
 DIR_OUTPUT_PATH = './output'
 HOST = "localhost"
-USER = "root"
-PASSWORD = "luanhd94"
+USER = ""
+PASSWORD = ""
 DB = "opencart"
 TABLE_ADDRESS = 'oc_address'
 TABLE_CUSTOMER= 'oc_customer'
