@@ -88,12 +88,12 @@ class Scaler:
 		number_container = len(containers_name)
 		containers_name = ["'"+x+"'" for x in containers_name]
 		containers_name = ",".join(containers_name)
-		query = "select DERIVATIVE(memory_usage)  as memory_usage,container_name from stats where  time > now()-5m and  container_name in ("+containers_name+") group by time(10s),container_name limit "+str(number_container)
+		query = "select memory_usage,container_name from stats where  time > now()-5m and  container_name in ("+containers_name+")  limit "+str(number_container)
 		result = self.influx_client.query(query)
 		points = result[0]["points"]
 		sum_memory_usage = 0
 		for point in points:
-			sum_memory_usage += points[0][1]/self.app["mem"]*100
+			sum_memory_usage += points[0][1]/(self.app["mem"]*1000000)*100
 		return sum_memory_usage / number_container
 
 	def avg_cpu_usage(self, containers_name):
@@ -132,18 +132,18 @@ class Scaler:
 			time.sleep(self.config["TIME"]['w_config_ha'])
 			self.logger.info("Config file haproxy.cfg...")
 			os.system("sudo ./servicerouter.py --marathon http://"+self.config["MARATHON"]["host"]+":"+self.config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
-			self.app["instance"] = marathon_client.get_app(self.app["name"]).instances
+			self.app["instance"] =self.marathon_client.get_app(self.app["name"]).instances
 			self.logger.info("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
 			time.sleep(self.config["TIME"]['after_scale'])
 
-
-	def check_rule(self, policie, value, type):
+	def check_rule(self, policie, value):
 		"""Check rule and return number intances need scale
 		
 		@param models.Policie policies
 		@param tuple value values of metric
 		@return integer number intances need scale
 		"""
+		delta = {}
 		delta["up"] = 0
 		delta["down"] = 0
 		# Check upper_threshold
@@ -163,19 +163,20 @@ class Scaler:
 				avg_cpu = self.avg_cpu_usage(containers_name)
 				avg_mem = self.avg_mem_usage(containers_name)
 				self.logger.info("Avg cpu usage:"+str(avg_cpu)+", avg memmory usage: "+ str(avg_mem))
+				rs_detal = {}
 				rs_detal['up'] = 0
 				rs_detal['down'] = 10
 				for policie in self.app["policies"]:
-					delta = self.check_rule(self.policie, (cpu, mem))
+					delta = self.check_rule(policie, (avg_cpu, avg_mem))
 					if(rs_detal['up'] < delta['up']):
 						rs_detal['up'] = delta['up']
 					if(rs_detal['down'] > delta['down']):
 						rs_detal['down'] = delta['down']
 
 				if(rs_detal['up'] > 0):
-					self.scale(self.app["name"], rs_detal['up'])
+					self.scale(rs_detal['up'])
 				elif(rs_detal['down'] > 0):
-					self.scale(self.app["name"], 0-rs_detal['down'])
+					self.scale(0-rs_detal['down'])
 			except Exception as e:
 				self.logger.exception(e)
 			finally:
