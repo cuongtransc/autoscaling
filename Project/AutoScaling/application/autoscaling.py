@@ -159,7 +159,7 @@ class Scaler:
 	def autoscaling(self):
 		while True:
 			try:
-				containers_name = self.get_containers_name(self.app["name"])
+				containers_name = self.get_containers_name()
 				avg_cpu = self.avg_cpu_usage(containers_name)
 				avg_mem = self.avg_mem_usage(containers_name)
 				self.logger.info("Avg cpu usage:"+str(avg_cpu)+", avg memmory usage: "+ str(avg_mem))
