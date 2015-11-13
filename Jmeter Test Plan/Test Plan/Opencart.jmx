@@ -19,7 +19,7 @@
           </elementProp>
           <elementProp name="UNUMBER" elementType="Argument">
             <stringProp name="Argument.name">UNUMBER</stringProp>
-            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.value">50</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -45,7 +45,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${UNUMBER}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${UNUMBER}</stringProp>
         <longProp name="ThreadGroup.start_time">1446368531000</longProp>
         <longProp name="ThreadGroup.end_time">1446368531000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -1073,7 +1073,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${UNUMBER}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${UNUMBER}</stringProp>
         <longProp name="ThreadGroup.start_time">1445705726000</longProp>
         <longProp name="ThreadGroup.end_time">1445705726000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -3395,7 +3395,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${UNUMBER}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${UNUMBER}</stringProp>
         <longProp name="ThreadGroup.start_time">1446863798000</longProp>
         <longProp name="ThreadGroup.end_time">1446863798000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
