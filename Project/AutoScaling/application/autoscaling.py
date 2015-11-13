@@ -93,7 +93,7 @@ class Scaler:
 		points = result[0]["points"]
 		sum_memory_usage = 0
 		for point in points:
-			sum_memory_usage += points[0][1]/(self.app["mem"]*1000000)*100
+			sum_memory_usage += points[0][1]/(self.app["mem"]*1073741824)*100
 		return sum_memory_usage / number_container
 
 	def avg_cpu_usage(self, containers_name):
