@@ -15,14 +15,6 @@ from marathon import MarathonClient
 import sys
 import logging
 
-client = InfluxDBClient(config["INFLUXDB"]["host"], config["INFLUXDB"]["port"], config["INFLUXDB"]["username"], config["INFLUXDB"]["password"], config["INFLUXDB"]["db_name"])
-marathon_client = MarathonClient('http://'+config["MARATHON"]['host']+':'+config["MARATHON"]['port'])
-
-app = None
-number_instance = 0
-app_mem = 0
-app_cpus = 0
-
 
 class Scaler:
 	"""Class for Scaling"""
