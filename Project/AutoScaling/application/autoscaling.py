@@ -20,7 +20,7 @@ class Scaler:
 	"""Class for Scaling"""
 	def __init__(self, app_name, config):
 		self.logger = logging.getLogger("autoscaling")
-		self.self.logger.setLevel(logging.DEBUG)
+		self.logger.setLevel(logging.DEBUG)
 
 		self.logger.info("Init object scaler...")
 		self.config = config
