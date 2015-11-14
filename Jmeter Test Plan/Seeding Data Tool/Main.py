@@ -9,7 +9,7 @@ import MySQLdb
 
 
 #register
-# customer_group_id,firstname,lastname,email,
+# customer_id,customer_group_id,firstname,lastname,email,
 # telephone,fax,company,address_id,address_1,address_2,city,postcode,
 # country_id,zone_id,password,confirm,newsletter,agree
 
@@ -18,7 +18,7 @@ import MySQLdb
 # address_2,city,postcode,country_id,zone_id, email, password
 
 def getID():
-    db = MySQLdb.connect(host=config.HOST, user=config.USER, passwd=config.PASSWORD,db=config.DB)
+    db = MySQLdb.connect(host=config.HOST,port=config.PORT, user=config.USER, passwd=config.PASSWORD,db=config.DB)
     cur = db.cursor()
     cur.execute("SELECT customer_id FROM "+config.TABLE_CUSTOMER+" order by customer_id desc limit 1")
     tm = cur.fetchone()
