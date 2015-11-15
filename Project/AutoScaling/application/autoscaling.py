@@ -45,11 +45,12 @@ class Scaler:
 		self.logger.debug("Reconfig haproxy.cfg...")
 		os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
-	def setup_logging(log_file = "~/autoscaling.log", level = logging.DEBUG, formatter = None):
+	def setup_logging(log_file = "autoscaling.log", level = logging.DEBUG, formatter = None):
 		if(formatter == None):
-			formatter = logging.Formatter('%(asctime)s: %(name)s - %(levelname)s - %(message)s')
+			formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 		fh = logging.FileHandler(log_file)
 		fh.setLevel(level)
+		fh.setFormatter(formatter)
 		self.logger.addHandler(fh)
 
 
@@ -168,7 +169,7 @@ class Scaler:
 				containers_name = self.get_containers_name()
 				avg_cpu = self.avg_cpu_usage(containers_name)
 				avg_mem = self.avg_mem_usage(containers_name)
-				self.logger.info("Avg cpu usage, avg memmory usage, current instance: %d %d %d", avg_cpu, avg_mem, app["instance"])
+				self.logger.info("Avg cpu usage, avg memmory usage, current instance: %f %f %d", avg_cpu, avg_mem, self.app["instance"])
 				rs_detal = {}
 				rs_detal['up'] = 0
 				rs_detal['down'] = 10
@@ -184,7 +185,7 @@ class Scaler:
 				elif(rs_detal['down'] > 0):
 					self.scale(0-rs_detal['down'])
 			except Exception as e:
-				self.logger.debug(e.message)
+				self.logger.debug(str(e))
 			finally:
 				time.sleep(self.config["TIME"]['monitor'])
 
