@@ -46,7 +46,7 @@ class Scaler:
 		os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
 	def setup_logging(log_file = "~/autoscaling.log", level = logging.DEBUG, formatter = None):
-		if(formatter = None):
+		if(formatter == None):
 			formatter = logging.Formatter('%(asctime)s: %(name)s - %(levelname)s - %(message)s')
 		fh = logging.FileHandler(log_file)
 		fh.setLevel(level)
