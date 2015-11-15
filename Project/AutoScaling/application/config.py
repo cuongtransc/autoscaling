@@ -27,7 +27,7 @@ CONFIG = {
 		"v_up" : 5,
 		"after_scale" : 30,
 		"v_down" : 5,
-		"monitor" : 5
+		"monitor" : 60
 	},
 
 	"MARIA_RESTFUL" : {
