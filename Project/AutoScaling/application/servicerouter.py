@@ -820,6 +820,7 @@ def setup_logging(syslog_socket):
     syslogHandler.setFormatter(formatter)
     consoleHandler.setFormatter(formatter)
     # syslogHandler.setLevel(logging.ERROR)
+    consoleHandler.setLevel(logging.ERROR)
     logger.addHandler(syslogHandler)
     logger.addHandler(consoleHandler)
 
