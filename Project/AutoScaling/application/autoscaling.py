@@ -22,10 +22,10 @@ class Scaler:
 		self.logger = logging.getLogger("autoscaling")
 		self.logger.setLevel(logging.DEBUG)
 
-		self.logger.info("Init object scaler...")
+		self.logger.debug("Init object scaler...")
 		self.config = config
 
-		self.logger.info("Connect RESTful mariadb and get policies...")
+		self.logger.debug("Connect RESTful mariadb and get policies...")
 		conn = http.client.HTTPConnection(config["MARIA_RESTFUL"]['host'], config["MARIA_RESTFUL"]['port'])
 		conn.request("GET", "/app/name/"+app_name)
 		json_app = conn.getresponse().read().decode("utf-8")
@@ -34,7 +34,7 @@ class Scaler:
 		json_policies = conn.getresponse().read().decode("utf-8")
 		self.app["policies"] = json.loads(json_policies)
 
-		self.logger.info("Connect influxdb and marathon...")
+		self.logger.debug("Connect influxdb and marathon...")
 		self.influx_client = InfluxDBClient(config["INFLUXDB"]["host"], config["INFLUXDB"]["port"], config["INFLUXDB"]["username"], config["INFLUXDB"]["password"], config["INFLUXDB"]["db_name"])
 		self.marathon_client = MarathonClient('http://'+config["MARATHON"]['host']+':'+config["MARATHON"]['port'])
 		
@@ -42,10 +42,16 @@ class Scaler:
 		self.app["mem"] = self.marathon_client.get_app(app_name).mem
 		self.app["cpus"] = self.marathon_client.get_app(app_name).cpus
 
-		self.logger.info("Reconfig haproxy.cfg...")
+		self.logger.debug("Reconfig haproxy.cfg...")
 		os.system("sudo ./servicerouter.py --marathon http://"+config["MARATHON"]["host"]+":"+config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 
-		
+	def setup_logging(log_file = "~/autoscaling.log", level = logging.DEBUG, formatter = None):
+		if(formatter = None):
+			formatter = logging.Formatter('%(asctime)s: %(name)s - %(levelname)s - %(message)s')
+		fh = logging.FileHandler(log_file)
+		fh.setLevel(level)
+		self.logger.addHandler(fh)
+
 
 	def get_cpu_usage(self, container_name):
 		"""Return cpu usage of container_name
@@ -127,13 +133,13 @@ class Scaler:
 			new_instance = self.app['min_instances']
 		if(new_instance != self.app["instance"]):
 			self.marathon_client.scale_app(self.app["name"], new_instance)
-			self.logger.info("Scaling "+self.app["name"]+" to: "+str(new_instance))
-			self.logger.info("Waiting for config file haproxy.cfg...")
+			self.logger.debug("Scaling "+self.app["name"]+" to: "+str(new_instance))
+			self.logger.debug("Waiting for config file haproxy.cfg...")
 			time.sleep(self.config["TIME"]['w_config_ha'])
-			self.logger.info("Config file haproxy.cfg...")
+			self.logger.debug("Config file haproxy.cfg...")
 			os.system("sudo ./servicerouter.py --marathon http://"+self.config["MARATHON"]["host"]+":"+self.config["MARATHON"]["port"]+" --haproxy-config /etc/haproxy/haproxy.cfg")
 			self.app["instance"] =self.marathon_client.get_app(self.app["name"]).instances
-			self.logger.info("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
+			self.logger.debug("Sleep "+str(self.config["TIME"]['after_scale'])+"s...")
 			time.sleep(self.config["TIME"]['after_scale'])
 
 	def check_rule(self, policie, value):
@@ -162,7 +168,7 @@ class Scaler:
 				containers_name = self.get_containers_name()
 				avg_cpu = self.avg_cpu_usage(containers_name)
 				avg_mem = self.avg_mem_usage(containers_name)
-				self.logger.info("Avg cpu usage:"+str(avg_cpu)+", avg memmory usage: "+ str(avg_mem))
+				self.logger.info("Avg cpu usage, avg memmory usage, current instance: %d %d %d", avg_cpu, avg_mem, app["instance"])
 				rs_detal = {}
 				rs_detal['up'] = 0
 				rs_detal['down'] = 10
@@ -178,12 +184,13 @@ class Scaler:
 				elif(rs_detal['down'] > 0):
 					self.scale(0-rs_detal['down'])
 			except Exception as e:
-				self.logger.exception(e)
+				self.logger.debug(e.message)
 			finally:
 				time.sleep(self.config["TIME"]['monitor'])
 
 def main():
 	scaler = Scaler(argv[1], CONFIG)
+	scaler.setup_logging()
 	scaler.autoscaling()
 if __name__ == '__main__':
     main()
