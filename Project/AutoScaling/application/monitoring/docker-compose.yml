@@ -59,26 +59,24 @@ mapping:
 #################################################
 #####################  Rule for applications      #########################
 #################################################
-docker image: https://hub.docker.com/_/mariadb/
 
-
-mariadb:
-    image: mariadb:10.0
-    ports:
-        - "3306:3306"
-    volumes:
-        - ./mariadb-data/:/var/lib/mysql/
-    environment:
-        - MYSQL_ROOT_PASSWORD=autoscaling@secret
-        - MYSQL_USER=autoscaling
-        - MYSQL_PASSWORD=autoscaling@123
-        - MYSQL_DATABASE=autoscaling
-    hostname: mariadb
-    domainname: teamlab.lan
-    cpu_shares: 512         # like 0.5 core CPU
-    mem_limit: 536870912    # 512 MB
-    privileged: true
-    restart: always
-    stdin_open: true
-    tty: true
+# mariadb:
+#     image: mariadb:10.0
+#     ports:
+#         - "3306:3306"
+#     volumes:
+#         - ./mariadb-data/:/var/lib/mysql/
+#     environment:
+#         - MYSQL_ROOT_PASSWORD=autoscaling@secret
+#         - MYSQL_USER=autoscaling
+#         - MYSQL_PASSWORD=autoscaling@123
+#         - MYSQL_DATABASE=autoscaling
+#     hostname: mariadb
+#     domainname: teamlab.lan
+#     cpu_shares: 512         # like 0.5 core CPU
+#     mem_limit: 536870912    # 512 MB
+#     privileged: true
+#     restart: always
+#     stdin_open: true
+#     tty: true
 
