@@ -25,7 +25,18 @@ cadvisor:
   ports:
     - "8081:8080"
   command: "-storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086"
-
+grafana:
+ image: "grafana/grafana:2.0.2"
+ ports:
+   - "3000:3000"
+ environment:
+   - INFLUXDB_HOST=localhost
+   - INFLUXDB_PORT=8086
+   - INFLUXDB_NAME=cadvisor
+   - INFLUXDB_USER=root
+   - INFLUXDB_PASS=root
+ links:
+   - "influxsrv:influxsrv"
 
 ################################################################################################
 ########################################## MAPPING DOCKERID - MESOSSID ##########################
