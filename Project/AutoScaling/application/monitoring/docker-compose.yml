@@ -49,7 +49,7 @@ mapping:
         #- /usr/bin/docker:/usr/bin/docker
 
     environment:
-        - INFLUXDB_HOST=172.17.42.1
+        - INFLUXDB_HOST=172.17.0.1
         - INFLUXDB_PORT=8086
         - INFLUXDB_NAME=cadvisor
         - INFLUXDB_USER=root
