@@ -59,7 +59,7 @@ class Scaler:
 
 		@param string container_name container name  
 		"""
-		query = "select DERIVATIVE(cpu_cumulative_usage)  as cpu_usage from stats where container_name = '"+container_name+"' and time > now()-5m group by time(10s) "
+		query = "select DERIVATIVE(cpu_cumulative_usage)  as cpu_usage from stats where container_name = '"+container_name+"' and time > now()-5m group by time(2s) "
 		result = self.influx_client.query(query)
 		points = result[0]["points"]
 		return (points[0][1]/1000000000/self.app["cpus"])*100
