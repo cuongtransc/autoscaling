@@ -3,7 +3,7 @@ import os
 import constant
 import config
 import time
-from sys import argv
+import sys
 from random import randint
 import MySQLdb
 
@@ -160,7 +160,11 @@ def get_param(x):
     }.get(x, 10)    # 9 is default if x not found
 
 def main():
-    config.NUM_OF_THREADS = get_param(argv[0])
+    arg_n_thread = '10'
+    if len(sys.argv) >= 2:
+        arg_n_thread = argv[1]
+    config.NUM_OF_THREADS = get_param(arg_n_thread)
+
     print 'Number of threads: '+str(config.NUM_OF_THREADS)
     # Truncate table
     if truncate_table() == False:
