@@ -162,7 +162,7 @@ def get_param(x):
 def main():
     arg_n_thread = '10'
     if len(sys.argv) >= 2:
-        arg_n_thread = argv[1]
+        arg_n_thread = sys.argv[1]
     config.NUM_OF_THREADS = get_param(arg_n_thread)
 
     print 'Number of threads: '+str(config.NUM_OF_THREADS)
