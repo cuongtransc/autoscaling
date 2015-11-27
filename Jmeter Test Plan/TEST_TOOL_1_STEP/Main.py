@@ -30,7 +30,7 @@ def getID():
 
 def getCustomerRecordFromDB():
     '''
-    Tao du lieu dang ky tai khoan nguoi dung
+    Tao du lieu make order
     address_id,customer_id,firstname,lastname,company,address_1,address_2,city,postcode,country_id,zone_id
     :return:
     '''
@@ -160,10 +160,17 @@ def get_param(x):
     }.get(x, 10)    # 9 is default if x not found
 
 def main():
+
     arg_n_thread = '10'
     if len(sys.argv) >= 2:
         arg_n_thread = sys.argv[1]
     config.NUM_OF_THREADS = get_param(arg_n_thread)
+
+    TEST_PLAN_FILE_PATH_1 = config.DIR_OUTPUT_PATH+'/plan/Opencart_register_'+str(config.NUM_OF_THREADS)+'.jmx'
+    TEST_PLAN_FILE_PATH_2 = config.DIR_OUTPUT_PATH+'/plan/Opencart_order_'+str(config.NUM_OF_THREADS)+'.jmx'
+
+    RUN_JMETER_1 = 'sh ../bin/jmeter -n -t '+TEST_PLAN_FILE_PATH_1+' -l '+config.RESULT_FILE_PATH_1
+    RUN_JMETER_2 = 'sh ../bin/jmeter -n -t '+TEST_PLAN_FILE_PATH_2+' -l '+config.RESULT_FILE_PATH_2
 
     print 'Number of threads: '+str(config.NUM_OF_THREADS)
     # Truncate table
@@ -175,7 +182,7 @@ def main():
         print 'Make Register Data Error !'
         return
 
-    if os.system(config.RUN_JMETER_1) != 0:
+    if os.system(RUN_JMETER_1) != 0:
         return
     print 'Register Test Plan done !'
 
@@ -187,7 +194,7 @@ def main():
     time.sleep(config.TIME_DELAY)
 
     # Run Order Jmeter Test Plan
-    if os.system(config.RUN_JMETER_2) != 0:
+    if os.system(RUN_JMETER_2) != 0:
         return
     print 'Order Test Plan done !'
 
